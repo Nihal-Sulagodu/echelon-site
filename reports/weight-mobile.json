@@ -1,0 +1,42 @@
+{
+  "total": 172096,
+  "files": 10,
+  "list": [
+    {
+      "name": "js/main.js?v=9005ae59ea",
+      "bytes": 19990
+    },
+    {
+      "name": "",
+      "bytes": 0
+    },
+    {
+      "name": "assets/fonts/fontshare/cabinet-grotesk-500.woff2",
+      "bytes": 20560
+    },
+    {
+      "name": "assets/fonts/fontshare/satoshi-variable.woff2",
+      "bytes": 42888
+    },
+    {
+      "name": "assets/fonts/dseg/DSEG7Classic-Bold.woff2",
+      "bytes": 5432
+    },
+    {
+      "name": "assets/photos/board-960.webp",
+      "bytes": 17304
+    },
+    {
+      "name": "js/vendor/gsap.min.js?v=3.15.0",
+      "bytes": 28720
+    },
+    {
+      "name": "assets/favicon.svg",
+      "bytes": 594
+    },
+    {
+      "name": "js/vendor/ScrollTrigger.min.js?v=3.15.0",
+      "bytes": 18303
+    }
+  ]
+}

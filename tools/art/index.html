@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Echelon art generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  @font-face { font-family: "Cabinet Grotesk"; font-weight: 500; src: url("../../assets/fonts/fontshare/cabinet-grotesk-500.woff2") format("woff2"); }
+  @font-face { font-family: "Satoshi"; font-weight: 300 900; src: url("../../assets/fonts/fontshare/satoshi-variable.woff2") format("woff2"); }
+  body { background: #000; color: #F5F5F7; font: 14px system-ui, sans-serif; margin: 0; padding: 16px; }
+  #log { white-space: pre-wrap; font: 12px ui-monospace, monospace; color: #FFC266; }
+  #thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  #thumbs canvas, #thumbs img { max-width: 100%; height: auto; outline: 1px solid rgba(255,255,255,.15); }
+  .wide { width: 100%; } .half { width: calc(50% - 4px); } .tiny { width: 72px; }
+</style>
+</head>
+<body>
+<p>Renders every generated image for the site and saves it into <code>assets/</code>. Run with
+<code>npm run art</code>, then open this page. Re-running overwrites the files.</p>
+<div id="status">working…</div>
+<div id="log"></div>
+<div id="thumbs"></div>
+<script src="art.js"></script>
+</body>
+</html>

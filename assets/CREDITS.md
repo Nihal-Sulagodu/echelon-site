@@ -1,0 +1,60 @@
+# Credits and licences
+
+Every file the site uses is listed here with where it came from and the terms it is used under.
+
+## Fonts (in `assets/fonts/`)
+
+All fonts are served from this site, so nothing is loaded from a font service when the page opens.
+
+| Font | Used for | Author | Licence |
+|---|---|---|---|
+| Cabinet Grotesk (500) | Headings | Indian Type Foundry, via Fontshare | ITF Free Font License 2.0 (`fontshare/ITF-FFL.txt`) |
+| Satoshi (variable) | Body text, buttons, labels | Indian Type Foundry, via Fontshare | ITF Free Font License 2.0 (`fontshare/ITF-FFL.txt`) |
+| DSEG7 Classic (Bold) | The LCD digits in the countdown and the schedule clock | keshikan, 2017 | SIL Open Font License 1.1 (`dseg/DSEG-LICENSE.txt`) |
+
+**Fontshare fonts:** downloaded unmodified from https://www.fontshare.com by `tools/fetch-fonts.mjs` (`npm run fonts`). The ITF licence allows using them on websites, including self-hosting. It does **not** allow sharing the font files on their own. That's why they're in `.gitignore` and must not go into a public repository. Uploading them to the site's own web host is normal use.
+
+**DSEG7:** taken unmodified from the `dseg` npm package, version 0.46.0 (https://github.com/keshikan/DSEG). The file's SHA-256 matches the published package file. "DSEG" is a Reserved Font Name under the OFL, so the file must stay unmodified if it keeps that name.
+
+## Code library (in `js/vendor/`)
+
+| Library | Version | Author | Licence |
+|---|---|---|---|
+| GSAP + ScrollTrigger | 3.15.0 | GreenSock (Webflow) | GreenSock "Standard No Charge" licence, https://gsap.com/standard-license. Free for all uses, including commercial. The package README is saved as `js/vendor/GSAP-README.md`. |
+
+Downloaded from https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ and kept in the project, so school networks that block CDNs still get the scroll effects.
+
+## Photo (in `assets/photos/`)
+
+| File | What it is | Source | Licence |
+|---|---|---|---|
+| `board-1600.webp`, `board-960.webp` | Close-up of a circuit board with a soft blue-violet glow, used in the About section | Photo by Brecht Corbeel on Unsplash: https://unsplash.com/photos/closeup-of-a-computers-motherboard-connector-q5EUp6a67pg | Unsplash License: free to use, including commercially, with no permission needed. |
+
+Re-saved as WebP at two widths; otherwise unchanged. Credit isn't required by the licence, but it's given here.
+
+## Logos (in `assets/logos/`)
+
+Used with permission: on 23 October 2026 Nihal (who runs this project) confirmed there is permission to use both logos on the site. Neither logo has been redrawn or recoloured.
+
+| File | Owner | Source |
+|---|---|---|
+| `bis-emblem.webp` | Bangalore International School | Taken from the Echelon 3.0 brochure (January 2026). The round emblem was cropped from the brochure image and the white caption dropped. The site prints the school's name as real text instead. |
+| `vidyashilp-university.webp` | Vidyashilp University | The university's own logo file: https://vidyashilp.edu.in/wp-content/uploads/2020/12/Logo.png, re-saved as WebP. |
+
+If either institution sends official high-resolution or SVG logo files, replace these and keep the same file names.
+
+## Artwork (in `assets/art/`, plus `assets/favicon*` and `assets/apple-touch-icon.png`)
+
+All original, made in code for this project. No stock images, no AI image generators, and nothing taken from any show, game, brand or other website.
+
+- `og-image.jpg`: the preview image for links shared on WhatsApp, Instagram and similar apps (a dotted orb in a ring, the wordmark and the tagline). Drawn by `tools/art/art.js`.
+- `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`: the echelon emblem, three bars in formation with the site's colour gradient. Drawn by `tools/art/art.js`.
+- Not files at all: the particle orb and intro (WebGL), the gravity well (canvas), the dot field (canvas), the glass event art (CSS gradients) and every icon (inline SVG). All are drawn by the page's own code.
+
+## Reference material (not used in the site)
+
+- **sentient-os.ai** was the design reference for the redesign, at Nihal's request. It was looked at in a browser for its overall look and the kinds of elements it uses (see `DECISIONS.md`, section 2). None of its code, images, text or logo is in this project. Every element was built from scratch. It uses the same two free Fontshare typefaces.
+- **The Echelon 3.0 website** (bisechelon.in/echelon3.0, January 2026) was the source of the event details, rules, timings, venue, tagline and registration link in `content.json`. These are last year's facts and need confirming.
+- **Echelon 3.0 brochure** (BIS, January 2026): the source of the BIS emblem (see Logos).
+- **Cyberpunk: Edgerunners** was the colour and mood reference for the first version only. Nothing from it was ever in the project, and the redesign doesn't use it at all.
+- `references/font-comparison.png`: a specimen sheet from the first version's font choice. Kept for the record.
