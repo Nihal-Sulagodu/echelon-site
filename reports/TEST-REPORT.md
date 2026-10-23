@@ -1,6 +1,6 @@
 # Browser test report
 
-Run: 2026-10-23T12:18:27.351Z · Chrome (installed) via playwright-core · `npm test`
+Run: 2026-10-23T12:59:03.871Z · Chrome (installed) via playwright-core · `npm test`
 
 **79 of 79 checks passed.**
 
@@ -49,10 +49,10 @@ Run: 2026-10-23T12:18:27.351Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro shows with a Skip button from the first frame | skip visible at 124 ms |
+| ✅ | intro shows with a Skip button from the first frame | skip visible at 134 ms |
 | ✅ | Skip removes the intro |  |
-| ✅ | intro is remembered for this session |  |
-| ✅ | reload in the same session: no intro |  |
+| ✅ | the intro plays again on every refresh |  |
+| ✅ | Skip works again after a refresh |  |
 | ✅ | no custom cursor on touch screens |  |
 | ✅ | no sideways scrolling | 0px |
 | ✅ | page weight at load under 3 MB | 168 KB in 10 files |
@@ -69,10 +69,10 @@ Run: 2026-10-23T12:18:27.351Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro finishes by itself in about 6–7 s | 6494 ms after navigation |
+| ✅ | intro finishes by itself in about 6–7 s | 6506 ms after navigation |
 | ✅ | intro progress reached 100% | 100% |
 | ✅ | glass cursor appears with a mouse |  |
-| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 94 frames |
+| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 98 frames |
 | ✅ | the lens flows into the shape of a button | lens 190px wide over a 178px button |
 | ✅ | native cursor comes back when the pointer leaves |  |
 | ✅ | first Tab lands on "Skip to content" | Skip to content |
@@ -101,7 +101,7 @@ Run: 2026-10-23T12:18:27.351Z · Chrome (installed) via playwright-core · `npm 
 | ✅ | counts down to a set date | 03:04:59:59 |
 | ✅ | ticks every second | 03:04:59:59 -> 03:04:59:58 |
 | ✅ | shows the "happening now" message once the date has passed |  |
-| ✅ | counts down to the date in content.json | 28:14:41:38 · Echelon starts on Saturday, 21 November 2026 at 8:30 am. |
+| ✅ | counts down to the date in content.json | 28:14:01:02 · Echelon starts on Saturday, 21 November 2026 at 8:30 am. |
 
 ## 6. Settings switches (content.json "settings")
 

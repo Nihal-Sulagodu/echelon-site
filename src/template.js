@@ -503,7 +503,7 @@ function dialog(c) {
 // Runs before first paint: marks JS as on, decides whether the intro plays,
 // and applies the visitor's saved effects choice. A failsafe hides the intro
 // after 9 s even if main.js never loads.
-const headScript = `(function(d){var h=d.documentElement,c=h.classList,fx=h.getAttribute('data-fx')!=='off',rm=!1,u=null,seen=!1;c.remove('no-js');c.add('js');try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}try{u=localStorage.getItem('echelon-fx')}catch(e){}if(u==='off')fx=!1;else if(u==='on'&&h.getAttribute('data-fx')!=='off')fx=!0;else if(rm)fx=!1;if(!fx)c.add('fx-off');try{seen=sessionStorage.getItem('echelon-intro')==='1'}catch(e){}if(fx&&!seen&&h.getAttribute('data-intro')==='on'){c.add('intro-on');window.__echelonFailsafe=setTimeout(function(){c.remove('intro-on')},9000)}})(document);`;
+const headScript = `(function(d){var h=d.documentElement,c=h.classList,fx=h.getAttribute('data-fx')!=='off',rm=!1,u=null;c.remove('no-js');c.add('js');try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}try{u=localStorage.getItem('echelon-fx')}catch(e){}if(u==='off')fx=!1;else if(u==='on'&&h.getAttribute('data-fx')!=='off')fx=!0;else if(rm)fx=!1;if(!fx)c.add('fx-off');if(fx&&h.getAttribute('data-intro')==='on'){c.add('intro-on');window.__echelonFailsafe=setTimeout(function(){c.remove('intro-on')},9000)}})(document);`;
 
 export function render(c, { art, inlineCss, jsHref, year }) {
   const s = c.settings;

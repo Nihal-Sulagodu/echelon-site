@@ -23,7 +23,6 @@ const storage = (kind) => ({
   set(key, value) { try { window[kind].setItem(key, value); } catch { /* private mode */ } },
 });
 const local = storage('localStorage');
-const session = storage('sessionStorage');
 
 const fxOn = () => !html.classList.contains('fx-off');
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));

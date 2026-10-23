@@ -26,7 +26,6 @@ const storage = (kind) => ({
   set(key, value) { try { window[kind].setItem(key, value); } catch { /* private mode */ } },
 });
 const local = storage('localStorage');
-const session = storage('sessionStorage');
 
 const fxOn = () => !html.classList.contains('fx-off');
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -463,7 +462,7 @@ async function createOrb(canvas, slot) {
 
 // ---- src/js/20-intro.js
 /* 20 · intro ---------------------------------------------------------------
- * About six seconds, once per session, never with reduced motion:
+ * About six seconds, on every page load, never with reduced motion:
  *   0.25 s  "Bangalore International School presents"
  *   1.25 s  a spark bursts into a spiral galaxy of particles
  *   2.45 s  the particles form the word "Echelon"
@@ -514,7 +513,6 @@ async function runIntro(orbReady) {
     el.remove();
   };
   const reveal = () => {
-    session.set('echelon-intro', '1');
     app.inert = false;
     el.classList.add('is-revealing');
     html.classList.add('hero-entering');

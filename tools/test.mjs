@@ -222,9 +222,11 @@ try {
     await page.locator('[data-skip-intro]').tap();
     await page.waitForSelector('#intro', { state: 'detached', timeout: 2000 });
     check('Skip removes the intro', true);
-    check('intro is remembered for this session', (await page.evaluate(() => sessionStorage.getItem('echelon-intro'))) === '1');
     await page.reload({ waitUntil: 'domcontentloaded' });
-    check('reload in the same session: no intro', !(await page.evaluate(() => document.documentElement.classList.contains('intro-on'))));
+    check('the intro plays again on every refresh', await page.evaluate(() => document.documentElement.classList.contains('intro-on')));
+    await page.locator('[data-skip-intro]').tap();
+    const skippedAgain = await page.waitForSelector('#intro', { state: 'detached', timeout: 2000 }).then(() => true).catch(() => false);
+    check('Skip works again after a refresh', skippedAgain);
     await page.waitForLoadState('load');
     await page.waitForTimeout(600);
     check('no custom cursor on touch screens', !(await page.locator('.lens').count()));

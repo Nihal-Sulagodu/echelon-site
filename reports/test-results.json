@@ -170,7 +170,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 124 ms"
+        "detail": "skip visible at 134 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -178,12 +178,12 @@
         "detail": ""
       },
       {
-        "label": "intro is remembered for this session",
+        "label": "the intro plays again on every refresh",
         "pass": true,
         "detail": ""
       },
       {
-        "label": "reload in the same session: no intro",
+        "label": "Skip works again after a refresh",
         "pass": true,
         "detail": ""
       },
@@ -250,7 +250,7 @@
       {
         "label": "intro finishes by itself in about 6–7 s",
         "pass": true,
-        "detail": "6494 ms after navigation"
+        "detail": "6506 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -265,7 +265,7 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 94 frames"
+        "detail": "largest gap 0.0 px over 98 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
@@ -390,7 +390,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "28:14:41:38 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
+        "detail": "28:14:01:02 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
       }
     ]
   },

@@ -1165,8 +1165,12 @@ html:not(.fx-off) .dialog[open] .dialog__panel { animation: dialog-in 0.5s var(-
 .intro__caption span:last-child { color: var(--text-3); font-size: 0.95rem; }
 .intro__word { top: 50%; font: 500 clamp(4rem, 2rem + 12vw, 12rem) / 1 var(--font-display); letter-spacing: -0.055em; }
 .intro__tagline {
-  top: calc(50% + clamp(3.4rem, 2rem + 6vw, 7rem));
-  font: 500 clamp(1.3rem, 1rem + 1.4vw, 2.2rem) / 1.1 var(--font-display);
+  /* The particle word is drawn at scale min(23.5vw, 42vh) (see 10-orb.js), and
+     its lowest dots sit 0.267 of that below the centre. The tagline starts a
+     clear gap under them, so the two never touch on any screen size. */
+  --tagline-size: clamp(1.3rem, 1rem + 1.4vw, 2.2rem);
+  top: calc(50% + min(23.5vw, 42vh) * 0.267 + max(min(23.5vw, 42vh) * 0.14, 1.75rem) + var(--tagline-size) * 0.55);
+  font: 500 var(--tagline-size) / 1.1 var(--font-display);
   letter-spacing: -0.02em;
   background: var(--warm);
   -webkit-background-clip: text;

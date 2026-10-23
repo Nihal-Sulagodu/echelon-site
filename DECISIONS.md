@@ -89,7 +89,7 @@ There are no illustrations, which keeps everything looking like material and lig
 
 ## 3. Loading intro
 
-**About 6.5 seconds, once per session.**
+**About 6.5 seconds, on every page load.**
 
 | Time | What happens |
 |---|---|
@@ -109,9 +109,12 @@ With the CPU slowed 4× (a cheap phone), it's gone at 6.98 s.
 - **Real progress.** The bar at the bottom fills as real things finish: the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.
 - **Skip intro** is in the HTML, visible from the first frame, and also works with Esc.
 - **Rules:**
-  - The intro plays once per session (sessionStorage).
+  - The intro plays on every page load, refreshes included. It first played once per session; Nihal asked for every refresh on 23 October 2026. Skip and Esc still end it at any point.
   - It never plays with reduced motion or with effects off.
   - A failsafe in `<head>` removes it after 9 s even if the script never loads.
+- **Tagline spacing.** The tagline's position is worked out from the particle word's real size: the orb's scale is `min(23.5vw, 42vh)`, and the word's lowest dots sit 0.267 of that below the centre. The tagline starts a gap of 14% of the scale below that (at least 28 px).
+  - Before, it moved with screen width only. That left a 2 px gap at 1440 × 900 and made it overlap the word at 1920 × 1080.
+  - Now the gap is 42–63 px on laptops and desktops, and 28 px on phones and tablets.
 - While the intro shows, the page underneath is `inert`, so keyboard users can't tab into hidden links.
 - **Fallback:** if WebGL isn't available, or the orb isn't ready 0.9 s after the caption, a text-only version plays (the word fades in and out).
 - *Rejected:* a video (weight, and no real progress), and the first version's 2-second slice-in, which was called short and lame.
