@@ -3,8 +3,8 @@
  *   0.25 s  "Bangalore International School presents"
  *   1.25 s  a spark bursts into a spiral galaxy of particles
  *   2.45 s  the particles form the word "Echelon"
- *   3.85 s  "Igniting the next generation."
- *   4.85 s  the word collapses into the orb, which glides into the hero
+ *   3.85 s  "Like migrating birds, we rise in formation."
+ *   4.85 s  the word collapses into the Earth-coloured orb, which glides into the hero
  *           while the black veil lifts.
  * The bar at the bottom shows real loading (fonts, the word layout, the page);
  * the word only forms once those are in, with a 4.5 s cap. Skip intro (or Esc)

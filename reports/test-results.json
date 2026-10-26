@@ -170,7 +170,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 134 ms"
+        "detail": "skip visible at 186 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -200,7 +200,7 @@
       {
         "label": "page weight at load under 3 MB",
         "pass": true,
-        "detail": "168 KB in 10 files"
+        "detail": "171 KB in 10 files"
       },
       {
         "label": "\"How it works\" is pinned for scrubbing",
@@ -235,7 +235,7 @@
       {
         "label": "page weight after scrolling everything",
         "pass": true,
-        "detail": "185 KB in 13 files"
+        "detail": "188 KB in 13 files"
       },
       {
         "label": "axe: no violations (375 px)",
@@ -265,7 +265,7 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 98 frames"
+        "detail": "largest gap 0.0 px over 96 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
@@ -350,7 +350,7 @@
       {
         "label": "desktop page weight at load under 3 MB",
         "pass": true,
-        "detail": "185 KB in 13 files"
+        "detail": "188 KB in 13 files"
       },
       {
         "label": "text over the hero art meets WCAG AA (1440 px)",
@@ -360,7 +360,7 @@
       {
         "label": "text over the hero art meets WCAG AA (1024 px)",
         "pass": true,
-        "detail": "20 text blocks, lowest 5.35:1 (p.lcd__label \"Time until Echelon starts\")"
+        "detail": "18 text blocks, lowest 5.32:1 (p.lcd__label \"Time until Echelon starts\")"
       },
       {
         "label": "axe: no violations (1440 px)",
@@ -390,7 +390,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "28:14:01:02 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
+        "detail": "25:22:06:40 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
       }
     ]
   },

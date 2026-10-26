@@ -587,7 +587,7 @@ html:not(.fx-off) .hero__presenter { animation: shimmer 6s linear infinite; }
   position: absolute;
   inset: 18%;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, rgba(255, 181, 71, 0.45), rgba(255, 77, 141, 0.32) 40%, rgba(61, 123, 255, 0.25) 65%, transparent 72%);
+  background: radial-gradient(circle at 50% 50%, transparent 52%, rgba(80, 160, 255, 0.35) 62%, rgba(61, 123, 255, 0.18) 68%, transparent 74%);
   filter: blur(40px);
 }
 /* Still orb for browsers without JavaScript / WebGL: a dotted, lit sphere in CSS. */
