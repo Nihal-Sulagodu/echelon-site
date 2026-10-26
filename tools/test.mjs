@@ -282,9 +282,9 @@ try {
     watchErrors(page, 'desktop');
     await page.addInitScript(INIT);
     await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('#intro', { state: 'detached', timeout: 12000 });
+    await page.waitForSelector('#intro', { state: 'detached', timeout: 22000 });
     const probe = await page.evaluate(() => window.__probe);
-    check('intro finishes by itself in about 6–7 s', probe.introGoneAt !== null && probe.introGoneAt <= 8000, `${Math.round(probe.introGoneAt)} ms after navigation`);
+    check('intro finishes by itself in about 14 s', probe.introGoneAt !== null && probe.introGoneAt <= 17000, `${Math.round(probe.introGoneAt)} ms after navigation`);
     check('intro progress reached 100%', probe.maxProgress === 100, `${probe.maxProgress}%`);
     await page.waitForLoadState('load');
     await page.waitForTimeout(500);

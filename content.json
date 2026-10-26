@@ -53,6 +53,7 @@
     "countdownStarts": "{name} starts on {date} at {time}.",
     "countdownLive": "Echelon is happening now",
     "introLines": ["Bangalore International School", "presents"],
+    "introPlaces": ["India", "South India", "Bengaluru"],
     "introWords": ["Code.", "Build.", "Compete."]
   },
 

@@ -1,11 +1,15 @@
 /* 20 · intro ---------------------------------------------------------------
- * About six seconds, on every page load, never with reduced motion:
- *   0.25 s  "Bangalore International School presents"
- *   1.25 s  a spark bursts into a spiral galaxy of particles
- *   2.45 s  the particles form the word "Echelon"
- *   3.85 s  "Like migrating birds, we rise in formation."
- *   4.85 s  the word collapses into the Earth-coloured orb, which glides into the hero
- *           while the black veil lifts.
+ * About fourteen seconds, on every page load, never with reduced motion:
+ *   0 s     the Earth; a V of birds migrates south over the Himalayas and the
+ *           camera follows them down: India, South India, Bengaluru, then the
+ *           school campus (15-journey.js)
+ *   8 s     the campus bursts into particles, under
+ *           "Bangalore International School presents"
+ *   9.2 s   a spark bursts into a spiral galaxy of particles
+ *  10.4 s   the particles form the word "Echelon"
+ *  11.8 s   "Like migrating birds, we rise in formation."
+ *  12.8 s   the word collapses into the Earth-coloured orb, which glides
+ *           into the hero while the black veil lifts.
  * The bar at the bottom shows real loading (fonts, the word layout, the page);
  * the word only forms once those are in, with a 4.5 s cap. Skip intro (or Esc)
  * jumps straight to the end.
@@ -67,10 +71,32 @@ async function runIntro(orbReady) {
     if (e.key === 'Escape') { d.removeEventListener('keydown', onKey); skip(); }
   });
 
-  await wait(250, token);
+  // The flight in. Without a 2D canvas the intro starts at the caption, as before.
+  const journey = await createJourney($('.intro__map', el)).catch(() => null);
   if (token.cancelled) return;
-  show(caption);
-  await wait(1000, token);
+  if (journey) {
+    const place = $('.intro__place', el);
+    const names = (place.dataset.places || '').split('|');
+    let want = '';
+    await journey.play(token, (i) => {
+      want = i;
+      place.classList.remove('is-show');
+      if (i === '') return;
+      setTimeout(() => { if (want === i) { place.textContent = names[i] || ''; place.classList.add('is-show'); } }, 250);
+    });
+    want = '';
+    if (token.cancelled) return;
+    place.classList.remove('is-show');
+    show(caption);
+    await journey.explode(token);
+    if (token.cancelled) return;
+    await wait(300, token);
+  } else {
+    await wait(250, token);
+    if (token.cancelled) return;
+    show(caption);
+    await wait(1000, token);
+  }
   if (token.cancelled) return;
   hide(caption);
 

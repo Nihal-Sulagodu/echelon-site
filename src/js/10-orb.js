@@ -229,6 +229,16 @@ const LAND = [
 ];
 const ICE = [[-50,60,-42,60,-20,70,-18,80,-35,83,-60,82,-72,78,-58,70]];
 
+// The big deserts: Sahara, Arabia and Iran, the Thar, Central Asia, Australia, Mexico.
+function isDry(lat, lon) {
+  const a = Math.abs(lat);
+  if (a > 14 && a < 33 && lon > -18 && lon < 69) return true;
+  if (lat > 24 && lat < 30.5 && lon >= 69 && lon < 75.5) return true;
+  if (lat > 36 && lat < 48 && lon > 55 && lon < 110) return true;
+  if (lat < -18 && lat > -33 && lon > 115 && lon < 150) return true;
+  return lat > 18 && lat < 33 && lon > -117 && lon < -100;
+}
+
 // An Earth colour for every point on the sphere: ocean, forest, desert or ice.
 function earthColours(sphere, N, rnd) {
   const W = 360, H = 180;
@@ -256,8 +266,7 @@ function earthColours(sphere, N, rnd) {
     let col;
     if (px[k + 2] > 128 || lat < -64 || lat > 80) col = [0.9, 0.95, 1.0];
     else if (px[k] > 128) {
-      const dry = (Math.abs(lat) > 14 && Math.abs(lat) < 33 && !(lon > 88 && lon < 125)) || (lat > 36 && lat < 48 && lon > 55 && lon < 110);
-      if (dry && rnd() < 0.85) col = [0.86, 0.68, 0.38];
+      if (isDry(lat, lon) && rnd() < 0.85) col = [0.86, 0.68, 0.38];
       else if (Math.abs(lat) > 58) col = [0.42, 0.6, 0.4];
       else col = [0.2, 0.7, 0.28];
     } else col = [0.07, 0.3, 0.85];

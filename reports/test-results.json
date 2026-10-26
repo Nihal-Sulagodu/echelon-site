@@ -170,7 +170,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 186 ms"
+        "detail": "skip visible at 168 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -200,7 +200,7 @@
       {
         "label": "page weight at load under 3 MB",
         "pass": true,
-        "detail": "171 KB in 10 files"
+        "detail": "179 KB in 10 files"
       },
       {
         "label": "\"How it works\" is pinned for scrubbing",
@@ -235,7 +235,7 @@
       {
         "label": "page weight after scrolling everything",
         "pass": true,
-        "detail": "188 KB in 13 files"
+        "detail": "195 KB in 13 files"
       },
       {
         "label": "axe: no violations (375 px)",
@@ -248,9 +248,9 @@
     "name": "4. Desktop with mouse and keyboard (1440 px)",
     "checks": [
       {
-        "label": "intro finishes by itself in about 6–7 s",
+        "label": "intro finishes by itself in about 14 s",
         "pass": true,
-        "detail": "6506 ms after navigation"
+        "detail": "14593 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -350,7 +350,7 @@
       {
         "label": "desktop page weight at load under 3 MB",
         "pass": true,
-        "detail": "188 KB in 13 files"
+        "detail": "195 KB in 13 files"
       },
       {
         "label": "text over the hero art meets WCAG AA (1440 px)",
@@ -390,7 +390,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "25:22:06:40 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
+        "detail": "25:21:43:29 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
       }
     ]
   },
