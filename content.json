@@ -10,6 +10,12 @@
     "scrollAnimations": true
   },
 
+  "intro": {
+    "_note": "The zoom at the start of the intro. With a Google Maps key it goes all the way down to the campus; without one it ends on the neighbourhood. See README, 'Zooming in to the campus'.",
+    "googleMapsKey": "",
+    "campus": { "lat": 13.04722, "lon": 77.6467, "widthKm": 0.8 }
+  },
+
   "site": {
     "title": "Echelon | Interschool tech fest at Bangalore International School",
     "description": "Echelon is an interschool tech fest for students in Grades 8–12, run by Bangalore International School in collaboration with Vidyashilp University. Seven events to code, build, pitch and race.",

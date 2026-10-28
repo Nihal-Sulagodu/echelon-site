@@ -132,6 +132,34 @@ Three other ways were built and measured first. Lighthouse in the build containe
 
 The LCP fix is a real one, not a trick. Each layer starts fading in while it's a third of the screen wide, so its first paint is smaller than the opening globe. That makes the globe, which is preloaded, the page's LCP (2.2–2.4 s on simulated slow 4G).
 
+### The campus: Google's imagery, live
+
+On 28 October 2026 Nihal asked for the zoom to go all the way into the school using Google Maps.
+- Copying Google's imagery into the site (screenshots, saved tiles) is against Google's terms, so that was ruled out.
+- Instead, the last two or three levels are drawn in the visitor's browser from Google's **Map Tiles API**, using a key set in `content.json` (`intro.googleMapsKey`).
+
+**How it works:**
+- The page asks for a session (`createSession`: satellite, 2x high-DPI, so 512 px tiles and a quarter as many requests). It keeps the session for its two-week life.
+- One viewport request returns Google's copyright line and the deepest zoom available here.
+- Then it fetches just the tiles covering each level and draws them into a canvas, centred on the campus. The canvas is scaled with a CSS transform: compositor-only, like the satellite images.
+
+**Placement:**
+- Each level's Google zoom is picked so its pixels match the screen, up to 2560 px across.
+- Level widths go up from the final view in steps of 2.6× until they meet the satellite images, so there are usually two or three Google levels.
+- The camera drifts from the school's map point to the campus centre (`intro.campus`) during these levels.
+- The final view fits `intro.campus.widthKm` across the screen's shorter side.
+
+**Attribution:** "Google Maps" (or the official logo, if added to `assets/logos/`) and Google's copyright line show at the bottom right, fading in and out with Google's imagery.
+
+**Failure:** If the session, the viewport request or any tile fails, that level and the ones after it are dropped and the zoom ends on the closest level that worked. Whether Google answered at all is known before the zoom starts (the page waits for that for at most 1.5 s), and it sets how long the zoom runs: 9.2 s down to the campus, 7.6 s to the neighbourhood. Measured with Google refusing the key, the intro ends at 14.9 s, the same as with no key.
+
+**Tested without Google.** A local stand-in server answered the three Google requests and rendered map tiles at the requested zoom and tile numbers from the Sentinel image, with a crosshair at the campus point. The crosshair stayed centred and the hand-over from the satellite images was seamless. A desktop visit used 36 tiles and a phone 46. It has not yet been run against Google's real service.
+
+**Costs and trade-offs, accepted by Nihal:**
+- Google bills per tile, beyond a monthly free amount.
+- The site now depends on a third party for the last frames.
+- Visitors' browsers contact Google during the intro.
+
 ### Rules
 
 - **Real progress.** The bar at the bottom fills as real things finish: the satellite images, the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.

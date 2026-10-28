@@ -1167,6 +1167,32 @@ html:not(.fx-off) .dialog[open] .dialog__panel { animation: dialog-in 0.5s var(-
   visibility: hidden;
   background: no-repeat 50% 50% / 100vmax;
 }
+/* Google's satellite tiles for the campus levels, drawn into canvases by 15-journey.js. */
+.intro__tiles {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: 50% 50%;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+/* Google's attribution, required while their imagery is on screen. */
+.intro__credit {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.6rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font: 400 0.6875rem/1.2 var(--font-body);
+  color: #fff;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.9), 0 0 1px #000;
+  opacity: 0;
+}
+.intro__credit img { display: block; height: 18px; width: auto; }
+.intro__gm { font-weight: 700; font-size: 0.75rem; }
 /* Marks the school until the streets around it are in view. */
 .intro__pin {
   position: absolute;

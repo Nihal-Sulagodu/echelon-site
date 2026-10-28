@@ -134,9 +134,50 @@ node build.js
 
 It downloads about 1 GB from Amazon's open satellite archive and takes around 10 minutes. The settings (which days, which levels, file sizes) are at the top of the script.
 
-**The zoom stops at the neighbourhood, not the campus.** Free satellite pictures are 10 m per pixel, which is too coarse to show the school's buildings. To end on the campus itself, the school would need a top-down aerial or drone photo that it owns. Google Maps, Bing and Esri pictures can't legally be copied into a website.
+### Zooming in to the campus (Google Maps)
+
+Free satellite pictures are 10 m per pixel, too coarse to show the school's buildings, so on their own the zoom stops at the neighbourhood. With a Google Maps key, it carries on down to the campus using Google's satellite imagery.
+
+Google's terms don't allow saving their imagery, so it isn't stored in this project. The last two or three frames are built from Google's map tiles in each visitor's browser while the intro plays. Without a key, or if Google's tiles can't load (a wrong key, or a school network that blocks Google), the zoom simply ends on the neighbourhood as before.
+
+**1. Get a key** (once):
+
+1. Go to https://console.cloud.google.com, create a project, and set up billing. Google needs this even for free use.
+2. Under **APIs & Services → Library**, enable **Map Tiles API**.
+3. Under **APIs & Services → Credentials**, create an **API key**, then restrict it:
+   - **Application restrictions:** Websites, with `nihal-sulagodu.github.io/*` and `bisechelon.in/*` (add `127.0.0.1/*` if you want to test locally).
+   - **API restrictions:** Map Tiles API only.
+
+The key ends up in the page's code, where anyone can read it. That's normal for Google Maps keys, and the two restrictions are what stop others from using it.
+
+**2. Try it** without changing anything: add `?gmaps=YOUR_KEY` to the address, for example `https://nihal-sulagodu.github.io/echelon-site/?gmaps=YOUR_KEY`. Only your tab uses it.
+
+**3. Turn it on for everyone:** in `content.json`, set
+
+```json
+"intro": {
+  "googleMapsKey": "YOUR_KEY",
+  "campus": { "lat": 13.04722, "lon": 77.6467, "widthKm": 0.8 }
+}
+```
+
+then run `node build.js`.
+
+- `campus.lat` and `campus.lon` are the centre of the final view. They start at the centre of the school's outline on OpenStreetMap. Nudge them if the campus isn't centred.
+- `widthKm` is how much ground fits across the screen's shorter side at the end. Make it smaller to get closer.
+
+**Cost.** Each visit to the intro loads about 35–50 of Google's tiles: more on large, sharp screens, fewer on later visits if the browser has kept them. Google bills Map Tiles per request, with a free amount each month. Check the current free amount and prices on Google's pricing page before launch, and set a **budget alert** in the Cloud console so a busy week can't surprise anyone.
+
+**Attribution.** While Google's imagery is on screen, the intro shows "Google Maps" and Google's copyright line in the bottom-right corner, as Google requires.
+- Google prefers its logo to the words. To use it, download Google's attribution assets from https://developers.google.com/maps/documentation/tile/policies#logo-attribution. Save the white, outlined "Google Maps" logo as `assets/logos/google-maps-logo.svg`, then run `node build.js`; the build picks it up.
+- Don't edit the logo.
+
+**Privacy.** With a key set, every visitor's browser contacts Google's servers during the intro. Everything else on the site is served from this site alone.
+
+### The birds
 
 **The birds are switched off for now.** To bring back the V formations of birds around the hero orb, set `BIRDS` to `true` near the top of `birdRoles()` in `src/js/10-orb.js`, then run `node build.js`.
+
 ---
 
 ## Fonts
