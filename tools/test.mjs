@@ -136,7 +136,8 @@ const INIT = () => {
 
 const server = spawn(process.execPath, [path.join(root, 'tools', 'serve.mjs'), root, String(PORT)], { stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 600));
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+// CHROME_PATH runs the tests in another Chrome or Chromium, e.g. where Google Chrome isn't installed.
+const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH, headless: true } : { channel: 'chrome', headless: true });
 
 const errors = [];
 function watchErrors(page, label) {

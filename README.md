@@ -5,9 +5,10 @@ A one-page website for **Echelon**, the interschool tech fest run by Bangalore I
 **Live site: https://nihal-sulagodu.github.io/echelon-site/** (GitHub Pages; see [Publishing](#publishing)). It isn't on bisechelon.in yet.
 
 - The look is black and minimal, with a glowing particle orb, glass panels and a liquid-glass cursor.
+- The intro falls from space to the school through real satellite images (Sentinel-2), then the particles form the word "Echelon".
 - The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The event details come from last year's Echelon 3.0 site. One thing is still a placeholder: the contact email.
-- Mobile Lighthouse: 99 performance, 100 accessibility, 100 best practices, 100 SEO (median of 3 runs). Desktop scores 100 on all four.
-- Browser tests: 79 of 79 checks pass.
+- Mobile Lighthouse (28 October 2026, in a container with no GPU, which is harsher than a normal machine): 93 performance, 100 accessibility, 96 best practices, 100 SEO, median of 3 runs. Desktop scores 100 for performance. The 96 in best practices only happened because the fonts couldn't be downloaded in that container.
+- Browser tests: 78 of 79 checks pass. The one failure is the same two missing font files.
 - Details are in [`reports/`](reports/README.md).
 
 ---
@@ -120,6 +121,22 @@ For **everyone**, set any of these to `false` in `content.json`, then run `node 
 
 Visitors can switch effects off themselves with the **sparkle button** next to Register in the header, and their choice is remembered. Anyone with "reduce motion" set on their phone or computer gets the still version automatically.
 
+
+### The satellite images in the intro
+
+The zoom from space uses eight satellite images in `assets/intro/`, from the whole Earth down to the streets around the school. They're already made, so you don't need to do anything. To make them again (for example to change the colours, the sizes, or the date of the pictures), you need Python 3.10 or newer:
+
+```
+pip install rasterio pyproj numpy pillow scipy global-land-mask
+python3 tools/intro-imagery/make.py
+node build.js
+```
+
+It downloads about 1 GB from Amazon's open satellite archive and takes around 10 minutes. The settings (which days, which levels, file sizes) are at the top of the script.
+
+**The zoom stops at the neighbourhood, not the campus.** Free satellite pictures are 10 m per pixel, which is too coarse to show the school's buildings. To end on the campus itself, the school would need a top-down aerial or drone photo that it owns. Google Maps, Bing and Esri pictures can't legally be copied into a website.
+
+**The birds are switched off for now.** To bring back the V formations of birds around the hero orb, set `BIRDS` to `true` near the top of `birdRoles()` in `src/js/10-orb.js`, then run `node build.js`.
 ---
 
 ## Fonts
@@ -181,8 +198,9 @@ assets/fonts/       Fontshare fonts (downloaded, not committed) and DSEG7
 assets/photos/      the circuit-board photo in About
 assets/logos/       BIS emblem, Vidyashilp University logo
 assets/art/         the generated link-preview image
+assets/intro/       the satellite images for the intro zoom (made by tools/intro-imagery/make.py)
 assets/CREDITS.md   where every asset came from and its licence
-tools/              local server, font download, art generator, tests, Lighthouse runner
+tools/              local server, font download, art generator, intro imagery, tests, Lighthouse runner
 reports/            test, axe and Lighthouse results
 references/         design reference from the first version
 DECISIONS.md        every design and technical decision, with reasons

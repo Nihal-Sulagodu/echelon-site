@@ -2,10 +2,10 @@
  * One full-screen canvas, thousands of points. Each point knows four shapes:
  * a single spark at the centre, a spiral galaxy, the letters of the word
  * "Echelon" and a globe coloured like the Earth. The intro blends between
- * them; after that the globe follows the hero's orb slot as the page scrolls,
- * with two small V formations of birds circling it. As the hero leaves the
- * screen the globe breaks apart and some of its points fly off as flocks of
- * birds in V formation (an echelon), crossing the sky before fading out.
+ * them; after that the globe follows the hero's orb slot as the page scrolls.
+ * As the hero leaves the screen the globe breaks apart. (With BIRDS on, two V
+ * formations of birds also circle it, and some of its points fly off as flocks
+ * crossing the sky. They're switched off for now; see birdRoles below.)
  */
 
 const ORB_VERT = `
@@ -279,8 +279,11 @@ function earthColours(sphere, N, rnd) {
 // draws only the first part of the buffer) keeps birds spread through it.
 // 14 of them circle the globe in two V formations of 7; the rest are flocks of
 // 9 that fly off when the globe breaks apart.
+// Set BIRDS to true to bring them back (switched off in October 2026, see DECISIONS.md).
+const BIRDS = false;
 function birdRoles(N) {
   const out = new Float32Array(N * 4);
+  if (!BIRDS) return out;
   let orbiters = 0, flyers = 0;
   for (let i = 0; i < N; i++) {
     let kind = 0, j = 0, size = 0, f = 0;

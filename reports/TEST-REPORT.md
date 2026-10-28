@@ -1,8 +1,8 @@
 # Browser test report
 
-Run: 2026-10-26T05:16:36.713Z · Chrome (installed) via playwright-core · `npm test`
+Run: 2026-10-28T05:57:53.455Z · Chrome (installed) via playwright-core · `npm test`
 
-**79 of 79 checks passed.**
+**78 of 79 checks passed.**
 
 ## 1. JavaScript turned off (375 px)
 
@@ -49,31 +49,31 @@ Run: 2026-10-26T05:16:36.713Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro shows with a Skip button from the first frame | skip visible at 168 ms |
+| ✅ | intro shows with a Skip button from the first frame | skip visible at 151 ms |
 | ✅ | Skip removes the intro |  |
 | ✅ | the intro plays again on every refresh |  |
 | ✅ | Skip works again after a refresh |  |
 | ✅ | no custom cursor on touch screens |  |
 | ✅ | no sideways scrolling | 0px |
-| ✅ | page weight at load under 3 MB | 179 KB in 10 files |
+| ✅ | page weight at load under 3 MB | 1917 KB in 18 files |
 | ✅ | "How it works" is pinned for scrubbing |  |
 | ✅ | text over the hero art meets WCAG AA (375 px, scrolled 0px) | 4 text blocks, lowest 8.16:1 (p.hero__summary "The interschool tech fest fo") |
 | ✅ | text over the hero art meets WCAG AA (375 px, scrolled 520px) | 16 text blocks, lowest 5.32:1 (p.lcd__label "Time until Echelon starts") |
 | ✅ | menu opens |  |
 | ✅ | tapping a menu link closes the menu |  |
 | ✅ | a frame is drawn while scrolling the pinned section |  |
-| ✅ | page weight after scrolling everything | 195 KB in 13 files |
+| ✅ | page weight after scrolling everything | 1934 KB in 21 files |
 | ✅ | axe: no violations (375 px) |  |
 
 ## 4. Desktop with mouse and keyboard (1440 px)
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro finishes by itself in about 14 s | 14593 ms after navigation |
+| ✅ | intro finishes by itself in about 14 s | 14700 ms after navigation |
 | ✅ | intro progress reached 100% | 100% |
 | ✅ | glass cursor appears with a mouse |  |
-| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 96 frames |
-| ✅ | the lens flows into the shape of a button | lens 190px wide over a 178px button |
+| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 23 frames |
+| ✅ | the lens flows into the shape of a button | lens 199px wide over a 187px button |
 | ✅ | native cursor comes back when the pointer leaves |  |
 | ✅ | first Tab lands on "Skip to content" | Skip to content |
 | ✅ | focus is visible | solid |
@@ -89,7 +89,7 @@ Run: 2026-10-26T05:16:36.713Z · Chrome (installed) via playwright-core · `npm 
 | ✅ | Effects switch turns everything off | {"fxOff":true,"pressed":"false","stored":"off","triggers":0,"pinned":false,"cursor":false} |
 | ✅ | the choice is remembered |  |
 | ✅ | …and back on again | {"fxOff":false,"triggers":2,"pinned":true} |
-| ✅ | desktop page weight at load under 3 MB | 195 KB in 13 files |
+| ✅ | desktop page weight at load under 3 MB | 1934 KB in 21 files |
 | ✅ | text over the hero art meets WCAG AA (1440 px) | 21 text blocks, lowest 5.24:1 (a.scroll-hint "Scroll to explore") |
 | ✅ | text over the hero art meets WCAG AA (1024 px) | 18 text blocks, lowest 5.32:1 (p.lcd__label "Time until Echelon starts") |
 | ✅ | axe: no violations (1440 px) |  |
@@ -101,7 +101,7 @@ Run: 2026-10-26T05:16:36.713Z · Chrome (installed) via playwright-core · `npm 
 | ✅ | counts down to a set date | 03:04:59:59 |
 | ✅ | ticks every second | 03:04:59:59 -> 03:04:59:58 |
 | ✅ | shows the "happening now" message once the date has passed |  |
-| ✅ | counts down to the date in content.json | 25:21:43:29 · Echelon starts on Saturday, 21 November 2026 at 8:30 am. |
+| ✅ | counts down to the date in content.json | 23:21:02:13 · Echelon starts on Saturday, 21 November 2026 at 8:30 am. |
 
 ## 6. Settings switches (content.json "settings")
 
@@ -116,6 +116,6 @@ Run: 2026-10-26T05:16:36.713Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | no JavaScript errors in any run |  |
+| ❌ | no JavaScript errors in any run | reduced-375: Failed to load resource: the server responded with a status of 404 (Not Found) \| reduced-375: Failed to load resource: the server responded with a status of 404 (Not Found) \| reduced-1440: Failed to load resource: the server responded with a status of 404 (Not Found) \| reduced-1440: Failed to load resource: the server responded with a status of 404 (Not Found) \| mobile: Failed to load resource: the server responded with a status of 404 (Not Found) |
 
 Screenshots are in `reports/screens/`. Full axe results are in `reports/axe-*.json`.

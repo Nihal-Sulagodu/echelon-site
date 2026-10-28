@@ -1,18 +1,19 @@
 /* 20 · intro ---------------------------------------------------------------
  * About fourteen seconds, on every page load, never with reduced motion:
- *   0 s     the Earth; a V of birds migrates south over the Himalayas and the
- *           camera follows them down: India, South India, Bengaluru, then the
- *           school campus (15-journey.js)
- *   8 s     the campus bursts into particles, under
+ *   0 s     the Earth from space; the camera falls through real satellite
+ *           images: India, South India, Bengaluru, then the streets around
+ *           the school (15-journey.js)
+ *   7.6 s   the streets fade into the dark under
  *           "Bangalore International School presents"
- *   9.2 s   a spark bursts into a spiral galaxy of particles
- *  10.4 s   the particles form the word "Echelon"
- *  11.8 s   "Like migrating birds, we rise in formation."
- *  12.8 s   the word collapses into the Earth-coloured orb, which glides
+ *   9 s     a spark bursts into a spiral galaxy of particles
+ *  10.2 s   the particles form the word "Echelon"
+ *  11.6 s   the tagline
+ *  12.6 s   the word collapses into the Earth-coloured orb, which glides
  *           into the hero while the black veil lifts.
- * The bar at the bottom shows real loading (fonts, the word layout, the page);
- * the word only forms once those are in, with a 4.5 s cap. Skip intro (or Esc)
- * jumps straight to the end.
+ * The bar at the bottom shows real loading (the satellite images, fonts, the
+ * word layout, the page); the word only forms once those are in, with a 4.5 s
+ * cap. If the images are slow the camera waits for them, for 4 s at most.
+ * Skip intro (or Esc) jumps straight to the end.
  */
 
 async function runIntro(orbReady) {
@@ -33,8 +34,10 @@ async function runIntro(orbReady) {
   const fill = $('[data-intro-fill]', el);
   const token = { cancelled: false };
   let finished = false;
+  const journey = createJourney($('.intro__map', el));
 
   const tasks = [
+    journey ? journey.ready : null,
     d.fonts ? d.fonts.load('500 1em "Cabinet Grotesk"') : null,
     d.fonts ? d.fonts.load('400 1em Satoshi') : null,
     d.fonts ? d.fonts.load('700 1em DSEG7') : null,
@@ -50,6 +53,7 @@ async function runIntro(orbReady) {
   const hide = (n) => { n.classList.remove('is-show'); n.classList.add('is-gone'); };
 
   const cleanup = () => {
+    if (journey) journey.dispose();
     html.classList.remove('intro-on', 'hero-enter', 'hero-entering');
     el.remove();
   };
@@ -71,24 +75,22 @@ async function runIntro(orbReady) {
     if (e.key === 'Escape') { d.removeEventListener('keydown', onKey); skip(); }
   });
 
-  // The flight in. Without a 2D canvas the intro starts at the caption, as before.
-  const journey = await createJourney($('.intro__map', el)).catch(() => null);
+  // The fall from space. If even the first image can't load, the intro starts at the caption.
+  const place = $('.intro__place', el);
+  const names = (place.dataset.places || '').split('|');
+  let want = '';
+  const flew = journey && await journey.play(token, (i) => {
+    want = i;
+    place.classList.remove('is-show');
+    if (i === '') return;
+    setTimeout(() => { if (want === i) { place.textContent = names[i] || ''; place.classList.add('is-show'); } }, 250);
+  });
+  want = '';
   if (token.cancelled) return;
-  if (journey) {
-    const place = $('.intro__place', el);
-    const names = (place.dataset.places || '').split('|');
-    let want = '';
-    await journey.play(token, (i) => {
-      want = i;
-      place.classList.remove('is-show');
-      if (i === '') return;
-      setTimeout(() => { if (want === i) { place.textContent = names[i] || ''; place.classList.add('is-show'); } }, 250);
-    });
-    want = '';
-    if (token.cancelled) return;
+  if (flew) {
     place.classList.remove('is-show');
     show(caption);
-    await journey.explode(token);
+    await journey.fadeOut(token);
     if (token.cancelled) return;
     await wait(300, token);
   } else {

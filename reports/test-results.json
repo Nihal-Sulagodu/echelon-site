@@ -170,7 +170,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 168 ms"
+        "detail": "skip visible at 151 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -200,7 +200,7 @@
       {
         "label": "page weight at load under 3 MB",
         "pass": true,
-        "detail": "179 KB in 10 files"
+        "detail": "1917 KB in 18 files"
       },
       {
         "label": "\"How it works\" is pinned for scrubbing",
@@ -235,7 +235,7 @@
       {
         "label": "page weight after scrolling everything",
         "pass": true,
-        "detail": "195 KB in 13 files"
+        "detail": "1934 KB in 21 files"
       },
       {
         "label": "axe: no violations (375 px)",
@@ -250,7 +250,7 @@
       {
         "label": "intro finishes by itself in about 14 s",
         "pass": true,
-        "detail": "14593 ms after navigation"
+        "detail": "14700 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -265,12 +265,12 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 96 frames"
+        "detail": "largest gap 0.0 px over 23 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
         "pass": true,
-        "detail": "lens 190px wide over a 178px button"
+        "detail": "lens 199px wide over a 187px button"
       },
       {
         "label": "native cursor comes back when the pointer leaves",
@@ -350,7 +350,7 @@
       {
         "label": "desktop page weight at load under 3 MB",
         "pass": true,
-        "detail": "195 KB in 13 files"
+        "detail": "1934 KB in 21 files"
       },
       {
         "label": "text over the hero art meets WCAG AA (1440 px)",
@@ -390,7 +390,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "25:21:43:29 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
+        "detail": "23:21:02:13 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
       }
     ]
   },
@@ -424,8 +424,8 @@
     "checks": [
       {
         "label": "no JavaScript errors in any run",
-        "pass": true,
-        "detail": ""
+        "pass": false,
+        "detail": "reduced-375: Failed to load resource: the server responded with a status of 404 (Not Found) | reduced-375: Failed to load resource: the server responded with a status of 404 (Not Found) | reduced-1440: Failed to load resource: the server responded with a status of 404 (Not Found) | reduced-1440: Failed to load resource: the server responded with a status of 404 (Not Found) | mobile: Failed to load resource: the server responded with a status of 404 (Not Found)"
       }
     ]
   }

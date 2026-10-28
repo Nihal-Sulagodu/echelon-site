@@ -32,6 +32,18 @@ Downloaded from https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ and kept in the p
 
 Re-saved as WebP at two widths; otherwise unchanged. Credit isn't required by the licence, but it's given here.
 
+## Satellite images (in `assets/intro/`)
+
+The zoom from space at the start of the intro. Made by `tools/intro-imagery/make.py`, which downloads the data, reprojects it into one view centred on the school, grades the colour and saves the sizes the page uses. Nothing in them is drawn or invented: the colours of land and coastal water are what the satellite recorded. The only additions are the deep-sea fill (Sentinel-2 doesn't image the open ocean), the soft edges and the thin atmosphere line around the globe.
+
+| Files | What | Source | Licence |
+|---|---|---|---|
+| `earth-0-*` to `earth-4-*` (the Earth down to about 250 km across) | Sentinel-2 L2A 120 m cloudless mosaic, 11–20 February 2020 | Sinergise / Sentinel Hub, on AWS Open Data: `s3://sentinel-s2-l2a-mosaic-120` | CC BY 4.0. Required credit: "Contains modified Copernicus data 2020 processed by Sentinel Hub" |
+| `earth-5-*` to `earth-7-*` (Bengaluru and the school's neighbourhood) | Sentinel-2 L2A scenes `S2C_43PGQ_20260206_0_L2A` and `S2C_43PHQ_20260206_0_L2A`, 10 m per pixel, 6 February 2026 | European Space Agency / Copernicus, via Element 84 Earth Search on AWS Open Data: `s3://sentinel-cogs` | Copernicus Sentinel data terms: free to use, copy and change, with credit. Required credit: "Contains modified Copernicus Sentinel data 2026" |
+| (used to tell land from sea; not shipped) | NOAA GLOBE 1 km land mask, via the `global-land-mask` Python package | NOAA NGDC | Public domain (US government work) |
+
+The site shows the credit line in the footer (`content.json`, `footer.credit`). Keep it there while these images are used.
+
 ## Logos (in `assets/logos/`)
 
 Used with permission: on 23 October 2026 Nihal (who runs this project) confirmed there is permission to use both logos on the site. Neither logo has been redrawn or recoloured.
@@ -49,7 +61,7 @@ All original, made in code for this project. No stock images, no AI image genera
 
 - `og-image.jpg`: the preview image for links shared on WhatsApp, Instagram and similar apps (a dotted orb in a ring, the wordmark and the tagline). Drawn by `tools/art/art.js`.
 - `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`: the echelon emblem, three bars in formation with the site's colour gradient. Drawn by `tools/art/art.js`.
-- Not files at all: the particle orb and intro (WebGL), the gravity well (canvas), the dot field (canvas), the glass event art (CSS gradients) and every icon (inline SVG). All are drawn by the page's own code.
+- Not files at all: the particle orb and the particle part of the intro (WebGL), the gravity well (canvas), the dot field (canvas), the glass event art (CSS gradients) and every icon (inline SVG). All are drawn by the page's own code.
 
 ## Reference material (not used in the site)
 

@@ -22,7 +22,7 @@ const URL = `http://127.0.0.1:${PORT}/`;
 
 const server = spawn(process.execPath, [path.join(root, 'tools', 'serve.mjs'), root, String(PORT)], { stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 600));
-const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless=new', '--no-first-run', '--no-default-browser-check'] });
+const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless=new', '--no-first-run', '--no-default-browser-check', ...(process.env.CHROME_PATH ? ['--no-sandbox'] : [])] }); // CHROME_PATH: e.g. Chromium in a container
 
 const ms = (v) => `${(v / 1000).toFixed(2)} s`;
 const summary = [];

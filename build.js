@@ -40,6 +40,15 @@ if (!fs.existsSync(file('assets/art/manifest.json'))) {
 }
 const art = JSON.parse(fs.readFileSync(file('assets/art/manifest.json'), 'utf8'));
 
+// The satellite images for the intro zoom, made by tools/intro-imagery/make.py.
+// Without them the intro skips the zoom and starts at the caption.
+if (fs.existsSync(file('assets/intro/manifest.json'))) {
+  content._introLevels = JSON.parse(fs.readFileSync(file('assets/intro/manifest.json'), 'utf8')).levels
+    .map((l) => ({ km: l.km, sizes: l.sizes, feather: l.feather || 0 }));
+} else {
+  console.warn('  ! assets/intro/manifest.json is missing, so the intro has no zoom from space.');
+}
+
 /* ---------- checks -------------------------------------------------------- */
 
 const errors = [];
