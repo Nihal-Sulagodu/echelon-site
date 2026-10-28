@@ -837,7 +837,7 @@ async function runIntro(orbReady) {
 
   const cleanup = () => {
     if (journey) journey.dispose();
-    html.classList.remove('intro-on', 'hero-enter', 'hero-entering');
+    html.classList.remove('intro-on', 'intro-orb', 'hero-enter', 'hero-entering');
     el.remove();
   };
   const reveal = () => {
@@ -849,6 +849,7 @@ async function runIntro(orbReady) {
     if (finished) return;
     finished = true;
     if (orb) Object.assign(orb.state, { burst: 1, morph: 1, sphere: 1, intro: 0 });
+    html.classList.add('intro-orb');
     reveal();
     setTimeout(cleanup, skipped ? 700 : 300);
   };
@@ -892,6 +893,7 @@ async function runIntro(orbReady) {
     Object.assign(orb.state, { burst: 0, morph: 0, sphere: 0, intro: 1, alpha: 1 });
     orb.resetClock();
     orb.start();
+    html.classList.add('intro-orb'); // the orb has been hidden until now (see .intro-on .orb-canvas)
   }
 
   if (orb) {
