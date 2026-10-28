@@ -154,7 +154,8 @@ try {
     await page.goto(BASE, { waitUntil: 'load' });
     check('main heading renders', (await page.getByRole('heading', { level: 1, name: 'Echelon' }).count()) === 1);
     check('intro is not shown', !(await page.locator('#intro').isVisible()));
-    check('all 7 event cards render', (await page.locator('.ev').count()) === 7);
+    const eventCount = JSON.parse(fs.readFileSync(path.join(root, 'content.json'), 'utf8')).events.items.length;
+    check(`all ${eventCount} event cards render`, (await page.locator('.ev').count()) === eventCount);
     const summary = page.locator('.ev__details summary').first();
     check('rules use <details> (no JS needed)', await summary.isVisible());
     await summary.click();
@@ -283,9 +284,11 @@ try {
     watchErrors(page, 'desktop');
     await page.addInitScript(INIT);
     await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('#intro', { state: 'detached', timeout: 22000 });
+    // About 14 s, plus the campus clip's 4 s when assets/intro/campus.json is there.
+    const clip = fs.existsSync(path.join(root, 'assets', 'intro', 'campus.json'));
+    await page.waitForSelector('#intro', { state: 'detached', timeout: clip ? 26000 : 22000 });
     const probe = await page.evaluate(() => window.__probe);
-    check('intro finishes by itself in about 14 s', probe.introGoneAt !== null && probe.introGoneAt <= 17000, `${Math.round(probe.introGoneAt)} ms after navigation`);
+    check(`intro finishes by itself in about ${clip ? 19 : 14} s`, probe.introGoneAt !== null && probe.introGoneAt <= (clip ? 22000 : 17000), `${Math.round(probe.introGoneAt)} ms after navigation`);
     check('intro progress reached 100%', probe.maxProgress === 100, `${probe.maxProgress}%`);
     await page.waitForLoadState('load');
     await page.waitForTimeout(500);

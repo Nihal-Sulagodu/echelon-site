@@ -81,6 +81,7 @@ const sprite = `
     <symbol id="i-recycle" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M19.5 12a7.5 7.5 0 0 1-13.2 4.9M4.5 12a7.5 7.5 0 0 1 13.2-4.9"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M18 3.5v3.9h-3.9M6 20.5v-3.9h3.9"/></symbol>
     <symbol id="i-drone" viewBox="0 0 24 24"><rect x="9.5" y="10" width="5" height="4" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M9.5 11 6.2 8.2M14.5 11l3.3-2.8M9.5 13l-3.3 2.8M14.5 13l3.3 2.8"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M2.5 7h6M15.5 7h6M2.5 17h6M15.5 17h6"/></symbol>
     <symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 8.5h18M10 12l-2.5 2.25L10 16.5M14 12l2.5 2.25L14 16.5"/></symbol>
+    <symbol id="i-logic" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="5.5" cy="18.5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="18.5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18.5" cy="18.5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 7.2v9.1M10.4 6.6 6.6 16.5M13.6 6.6l3.8 9.9"/></symbol>
     <symbol id="i-spark" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9Z"/></symbol>
     <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M3.2 19.5a5.8 5.8 0 0 1 11.6 0M15.8 5.2a3 3 0 0 1 0 5.6M17.6 14a5 5 0 0 1 3.2 5.5"/></symbol>
     <symbol id="i-campus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M3 20.5h18M5 20.5V10l7-5 7 5v10.5M9.5 20.5v-5h5v5"/></symbol>
@@ -110,7 +111,7 @@ function intro(c) {
   return `
 <div class="intro" id="intro" data-intro>
   <div class="intro__veil"></div>
-  <div class="intro__map" aria-hidden="true" data-levels="${esc(JSON.stringify(c._introLevels || []))}"></div>
+  <div class="intro__map" aria-hidden="true" data-levels="${esc(JSON.stringify(c._introLevels || []))}"${c._introClip ? ` data-clip="${esc(JSON.stringify(c._introClip))}"` : ''}></div>
   <div class="intro__stage" aria-hidden="true">
     <p class="intro__place" data-places="${esc(c.ui.introPlaces.join('|'))}"></p>
     <p class="intro__caption">${c.ui.introLines.map((l) => `<span>${esc(l)}</span>`).join('')}</p>
@@ -296,7 +297,8 @@ function paletteStyle(ev) {
 
 function eventCard(ev, L, ui) {
   const row = (key) => (ev[key] ? `<div><dt>${esc(L[key])}</dt><dd>${txt(ev[key])}</dd></div>` : '');
-  const facts = [ev.teamSize, ev.duration].filter(Boolean).map((f) => `<li>${txt(f)}</li>`).join('');
+  // On the card itself: when and where. Team size and the rest are in the details.
+  const facts = [[ev.time, 'clock'], [ev.venue, 'pin']].filter(([f]) => f).map(([f, i]) => `<li>${icon(i, 'icon')}${txt(f)}</li>`).join('');
   const rules = ev.rules && ev.rules.length ? `<h4>${esc(L.rules)}</h4><ul class="rules">${ev.rules.map((r) => `<li>${txt(r)}</li>`).join('')}</ul>` : '';
   return `
           <li class="ev" id="${esc(ev.id)}" style="${paletteStyle(ev)}">
@@ -311,7 +313,7 @@ function eventCard(ev, L, ui) {
                 <details class="ev__details">
                   <summary class="btn btn--glass btn--small">${esc(ui.details)}<span class="sr-only"> for ${plain(ev.name)}</span></summary>
                   <div class="ev__full" data-event-full>
-                    <dl class="facts-grid">${row('grades')}${row('teamSize')}${row('teamsPerSchool')}${row('duration')}${row('priorKnowledge')}${row('resources')}</dl>
+                    <dl class="facts-grid">${row('grades')}${row('time')}${row('venue')}${row('teamSize')}${row('teamsPerSchool')}${row('duration')}${row('priorKnowledge')}${row('resources')}</dl>
                     <h4>${esc(L.about)}</h4>
                     <ol class="how-list">${ev.about.map((p) => `<li>${txt(p)}</li>`).join('')}</ol>
                     ${rules}

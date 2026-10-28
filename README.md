@@ -6,7 +6,7 @@ A one-page website for **Echelon**, the interschool tech fest run by Bangalore I
 
 - The look is black and minimal, with a glowing particle orb, glass panels and a liquid-glass cursor.
 - The intro falls from space to the school through real satellite images (Sentinel-2), then the particles form the word "Echelon".
-- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The event details come from last year's Echelon 3.0 site. One thing is still a placeholder: the contact email.
+- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Still placeholders: team sizes, teams per school and the contact email.
 - Mobile Lighthouse (28 October 2026, in a container with no GPU, which is harsher than a normal machine): 93 performance, 100 accessibility, 96 best practices, 100 SEO, median of 3 runs. Desktop scores 100 for performance. The 96 in best practices only happened because the fonts couldn't be downloaded in that container.
 - Browser tests: 78 of 79 checks pass. The one failure is the same two missing font files.
 - Details are in [`reports/`](reports/README.md).
@@ -50,6 +50,9 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 | Where in `content.json` | What it needs |
 |---|---|
+| `events.items[n].teamSize` | Each event's team size (all eight events) |
+| `events.items[n].teamsPerSchool` | How many teams each school can send to each event (all eight) |
+| `faq.items[2].a` | The answer to "How big is a team, and how many can a school send?" |
 | `contact.email` | The email address for questions |
 | `faq.items[7].a` | The answer to "Who do we contact with questions?", which needs the same email |
 
@@ -57,21 +60,20 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 ### Filled in from other sources, so check before launch
 
-- **The date:** Saturday, 21 November 2026, from the BIS 2026–27 school calendar, which lists "ECHELON 4.0" that day. The calendar gives no time, so the countdown uses last year's 8:30 am start.
-- **Everything else** comes from the Echelon 3.0 website (January 2026), so it's last year's details: the events, rules, team sizes, grades, timings (8:30 am to 1:30 pm), the venue, the tagline "Igniting the next generation." and the registration link.
+- **The events and the day:** from the Echelon 4.0 programme document ("Echelon 4.0 – High School Competitions", October 2026). That covers the eight events, their times, rooms, descriptions and rules, and the programme: reporting at 8:15 am, the opening ceremony at 9:00, lunch at 12:45 and prize distribution from 1:30 to 2:30 pm. The countdown counts to the 8:15 am reporting time.
+- **Left out on purpose:** the prize amounts.
 - **The registration link is last year's Google Form.** It still opens, but its title is "ECHELON 2026". Put this year's form in `event.registrationUrl`.
-- Check each event in `events.items` against this year's rules.
 
 ### Changing the event date (the countdown)
 
 In `content.json`, set:
 
 ```json
-"date": "2026-11-21T08:30:00+05:30",
+"date": "2026-11-21T08:15:00+05:30",
 "dateText": "Saturday, 21 November 2026",
 ```
 
-- `date` drives the LCD countdown in the hero. Keep the `+05:30` at the end, which is India time. If the start time changes, change the `08:30` part.
+- `date` drives the LCD countdown in the hero. Keep the `+05:30` at the end, which is India time. If the start time changes, change the `08:15` part.
 - Leave `date` as `""` and the page says "Date to be announced" instead of counting.
 - Once the time has passed, the countdown says "Echelon is happening now".
 
@@ -134,9 +136,49 @@ node build.js
 
 It downloads about 1 GB from Amazon's open satellite archive and takes around 10 minutes. The settings (which days, which levels, file sizes) are at the top of the script.
 
-**The zoom stops at the neighbourhood, not the campus.** Free satellite pictures are 10 m per pixel, which is too coarse to show the school's buildings. To end on the campus itself, the school would need a top-down aerial or drone photo that it owns. Google Maps, Bing and Esri pictures can't legally be copied into a website.
+### Zooming in to the campus (Google Earth Studio)
+
+Free satellite pictures are 10 m per pixel, too coarse to show the school's buildings, so the satellite zoom stops at the streets around the school. The last few seconds, down to the campus, are a clip rendered in **Google Earth Studio**, Google's free tool for making videos from Google Earth imagery.
+
+- Earth Studio stamps the required credit ("Google Earth" and the imagery providers) onto every frame. Google requires it to stay visible, so don't crop or cover it.
+- Google allows Earth Studio footage for education and non-profit use, with that credit.
+- Without the clip files, the intro ends on the streets as before.
+
+**1. Render two clips in Earth Studio** (https://earth.google.com/studio/, Chrome only, Google account needed):
+
+| | Landscape | Portrait |
+|---|---|---|
+| Size | 1920 × 1080 | 1080 × 1920 |
+| Length | 4 s at 30 fps (120 frames) | same |
+| Camera position, both keyframes | longitude `77.6467`, latitude `13.04722` | same |
+| Camera rotation, both keyframes | tilt `0` (straight down), heading `0` (north up) | same |
+| Altitude, first frame | `18300` m above the ground | `32600` m |
+| Altitude, last frame | `2300` m | `4000` m |
+
+- Add `900` to each altitude if Earth Studio only offers height above sea level.
+- In **Add attributes**, leave **Time of Day**, **Clouds** and **Field of View** unticked.
+- When rendering, use **Texture quality: High** and **Attribution: bottom centre**. That spot is never cropped on any screen shape.
+
+**2. Turn the frames into the site's videos.** You need ffmpeg:
+
+```
+tools/intro-imagery/campus-clip.sh path/to/landscape-frames path/to/portrait-frames 11.5
+node build.js
+```
+
+The script makes `campus-landscape` and `campus-portrait` videos in `assets/intro/` (AV1 WebM plus H.264 MP4, each under 1.1 MB) and writes `assets/intro/campus.json`.
+
+The last number is how many km the first frame shows across its longer side. The satellite zoom ends on exactly that view, so the cut into the clip is seamless. With the altitudes above it should be 11.5. If the cut looks like it jumps in or out, adjust that number and rebuild.
+
+**How it plays:**
+- The page downloads only the clip that matches the screen's shape. It starts 1.5 s into the zoom, so it doesn't slow down the first paint.
+- If the clip hasn't loaded 2 s after the satellite zoom ends, or the browser won't autoplay it (iPhones in Low Power Mode), the intro carries on without it.
+- With the clip, the intro takes about 19 s instead of 15.
+
+### The birds
 
 **The birds are switched off for now.** To bring back the V formations of birds around the hero orb, set `BIRDS` to `true` near the top of `birdRoles()` in `src/js/10-orb.js`, then run `node build.js`.
+
 ---
 
 ## Fonts
@@ -230,9 +272,8 @@ To change something on the live site:
 
 ### Before telling people about it
 
-1. Set the contact email. `node build.js` should print "No placeholders left."
-2. Swap in this year's registration form and check the event details.
-3. Confirm the date and the 8:30 am start.
+1. Fill in the team sizes, teams per school and contact email. `node build.js` should print "No placeholders left."
+2. Swap in this year's registration form.
 
 ### Moving to bisechelon.in later
 

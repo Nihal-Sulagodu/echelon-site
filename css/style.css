@@ -840,7 +840,8 @@ html:not(.fx-off) .marquee { animation: marquee 70s linear infinite; }
   list-style: none;
 }
 .ev { grid-column: span 2; }
-.ev:nth-child(1), .ev:nth-child(2), .ev:nth-child(6), .ev:nth-child(7) { grid-column: span 3; }
+/* Eight cards on six columns: two wide ones on top, then two rows of three. */
+.ev:nth-child(1), .ev:nth-child(2) { grid-column: span 3; }
 .ev__card {
   position: relative;
   display: flex;
@@ -868,7 +869,8 @@ html:not(.fx-off) .marquee { animation: marquee 70s linear infinite; }
 .ev__title { margin: 0; font: 500 1.75rem / 1.1 var(--font-display); letter-spacing: -0.03em; }
 .ev__summary { margin: 0; color: var(--text-2); }
 .ev__facts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.25rem 0 0.5rem; padding: 0; list-style: none; }
-.ev__facts li { padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); font-size: 0.85rem; }
+.ev__facts li { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); font-size: 0.85rem; }
+.ev__facts .icon { width: 0.95rem; height: 0.95rem; flex: none; opacity: 0.8; }
 .ev__open { align-self: flex-start; margin-top: auto; }
 .ev__open[hidden] { display: none; }
 .ev__details { margin-top: auto; }
@@ -890,11 +892,11 @@ html:not(.fx-off) .marquee { animation: marquee 70s linear infinite; }
 @media (max-width: 63.99rem) {
   .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ev, .ev:nth-child(n) { grid-column: span 1; }
-  .ev:last-child { grid-column: 1 / -1; }
+  .ev:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media (max-width: 39.99rem) {
   .bento { grid-template-columns: 1fr; }
-  .ev:last-child { grid-column: auto; }
+  .ev:last-child:nth-child(odd) { grid-column: auto; }
 }
 
 .dialog {
@@ -1167,6 +1169,17 @@ html:not(.fx-off) .dialog[open] .dialog__panel { animation: dialog-in 0.5s var(-
   visibility: hidden;
   background: no-repeat 50% 50% / 100vmax;
 }
+/* The campus clip from Google Earth Studio; Google's credit is part of the picture. */
+.intro__clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.25s linear;
+}
+.intro__clip.is-on { opacity: 1; }
 /* Marks the school until the streets around it are in view. */
 .intro__pin {
   position: absolute;

@@ -621,9 +621,14 @@ async function createOrb(canvas, slot) {
 // ---- src/js/15-journey.js
 /* 15 · intro journey ----------------------------------------------------------
  * Before the particle intro, the camera falls from space to the school: the
- * whole Earth, India, South India, Bengaluru, then the streets around the
- * campus. Every frame is a real satellite image (Sentinel-2, see
- * assets/CREDITS.md) made by tools/intro-imagery/make.py.
+ * whole Earth, India, South India, Bengaluru, the streets around the campus
+ * and, when the clips are there, the campus itself. Down to the streets, every
+ * frame is a real satellite image (Sentinel-2, see assets/CREDITS.md) made by
+ * tools/intro-imagery/make.py. Closer than that, free satellite images are too
+ * coarse, so the last few seconds are a clip rendered in Google Earth Studio
+ * (assets/intro/campus-*.webm/.mp4, see the README), with Google's credit
+ * already in the picture. Without the clip, or if it can't play, the zoom
+ * ends on the streets.
  *
  * The eight images are the same map cropped tighter each time, all centred
  * on the school, so they line up exactly. Each frame scales them: a closer
@@ -672,7 +677,7 @@ function createJourney(el) {
   let gone = false;
   let firstReady;
   const first = new Promise((r) => { firstReady = r; });
-  const ready = supportsAvif().then(async (avif) => {
+  const images = supportsAvif().then(async (avif) => {
     for (let i = 0; i < levels.length && !gone; i++) {
       const sizes = avif ? levels[i].sizes : levels[i].sizes.filter((s) => s < 2560);
       const url = `assets/intro/earth-${i}-${pick(sizes)}.${avif ? 'avif' : 'webp'}`;
@@ -686,12 +691,47 @@ function createJourney(el) {
     }
   }).finally(() => firstReady()); // even if the first image failed, don't wait forever
 
+  // The campus clip: landscape or portrait to match the screen. It starts loading 1.5 s into
+  // the zoom, once the satellite images are in, so it never competes with them, or with the
+  // globe that is the page's largest paint (LCP), for bandwidth.
+  let zoomStarted;
+  const zooming = new Promise((r) => { zoomStarted = r; });
+  let clip = null;
+  try { clip = JSON.parse(el.dataset.clip || 'null'); } catch { clip = null; }
+  let video = null;
+  let clipReady = false;
+  if (clip) {
+    const portrait = window.innerHeight > window.innerWidth;
+    clip.shape = clip[portrait ? 'portrait' : 'landscape'];
+    video = d.createElement('video');
+    video.className = 'intro__clip';
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.setAttribute('aria-hidden', 'true');
+    video.addEventListener('canplaythrough', () => { clipReady = true; }, { once: true });
+    el.appendChild(video);
+    Promise.all([images, zooming.then(() => new Promise((r) => setTimeout(r, 1500)))]).then(() => {
+      if (gone) return;
+      clip.shape.files.forEach(([src, type]) => {
+        const source = d.createElement('source');
+        source.src = `assets/intro/${src}`;
+        source.type = type;
+        video.appendChild(source);
+      });
+      video.load();
+    });
+  }
+  const ready = images;
+
   const pin = d.createElement('span');
   pin.className = 'intro__pin';
   el.appendChild(pin);
 
   const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
   let raf = 0;
+  let endKm = 0; // where the zoom ends
+  let clipShown = false;
 
   // The screen size, read once and on resize: reading layout every frame forces a reflow each time.
   let span = 0;
@@ -731,10 +771,21 @@ function createJourney(el) {
     await Promise.race([first, new Promise((r) => setTimeout(r, 2500))]);
     if (token.cancelled || !loaded[0]) return false;
     const last = levels[levels.length - 1];
-    const km0 = 32000, km1 = last.km * 0.85;
+    const km0 = 32000;
+    // The clip's first frame shows `startKm` across its longer side. The zoom ends on exactly
+    // what that frame shows on this screen (object-fit: cover crops it), so the cut is seamless.
+    let km1 = last.km * 0.85;
+    if (clip) {
+      const w = window.innerWidth, h = window.innerHeight;
+      const [vw, vh] = clip.shape.size;
+      const scale = Math.max(w / vw, h / vh);
+      km1 = clip.startKm * (Math.max(w, h) / (Math.max(vw, vh) * scale));
+      endKm = km1;
+    }
     const closest = () => (deepest < 0 ? km0 : deepest === levels.length - 1 ? km1 : levels[deepest].km * 0.9);
     let lastPlace = null;
     el.classList.add('is-on');
+    zoomStarted();
     return new Promise((resolve) => {
       let t = 0, prev = performance.now(), stalled = 0;
       token.onCancel = () => { cancelAnimationFrame(raf); resolve(false); };
@@ -758,12 +809,29 @@ function createJourney(el) {
     });
   }
 
-  // The streets fade into the dark while the caption shows.
+  // The campus clip, if it loaded in time and the browser lets it play (iPhones in Low Power
+  // Mode block autoplay). Resolves once it has finished, or straight away if it can't play.
+  async function playClip(token) {
+    if (!video) return false;
+    const deadline = performance.now() + 2000;
+    while (!clipReady && performance.now() < deadline && !token.cancelled) await new Promise((r) => setTimeout(r, 50));
+    if (!clipReady || token.cancelled) return false;
+    try { await video.play(); } catch { return false; }
+    video.classList.add('is-on');
+    await new Promise((resolve) => {
+      video.addEventListener('ended', resolve, { once: true });
+      setTimeout(resolve, (video.duration || 6) * 1000 + 1500); // never hang on a stalled clip
+      token.onCancel = resolve;
+    });
+    clipShown = true;
+    return !token.cancelled;
+  }
+
+  // The streets (or the campus) fade into the dark while the caption shows.
   function fadeOut(token, duration = 1100) {
-    const last = levels[levels.length - 1];
-    const from = last.km * 0.85;
+    const from = endKm || levels[levels.length - 1].km * 0.85;
     return tween(duration, (v) => {
-      draw(from * (1 - 0.18 * v));
+      if (!clipShown) draw(from * (1 - 0.18 * v));
       el.style.opacity = (1 - v).toFixed(3);
     }, ease.inOutCubic, token).then(dispose);
   }
@@ -775,9 +843,10 @@ function createJourney(el) {
     cancelAnimationFrame(raf);
     window.removeEventListener('resize', measure);
     layers.forEach((l) => l.remove());
+    if (video) { video.pause(); video.removeAttribute('src'); video.textContent = ''; video.load(); video.remove(); }
   }
 
-  return { play, fadeOut, ready, dispose };
+  return { play, playClip, fadeOut, ready, dispose };
 }
 
 // ---- src/js/20-intro.js
@@ -785,7 +854,9 @@ function createJourney(el) {
  * About fourteen seconds, on every page load, never with reduced motion:
  *   0 s     the Earth from space; the camera falls through real satellite
  *           images: India, South India, Bengaluru, then the streets around
- *           the school (15-journey.js)
+ *           the school (15-journey.js), and, when its clip is there, a
+ *           few seconds of Google Earth Studio footage down to the campus
+ *           (everything after this moves later by the clip's length)
  *   7.6 s   the streets fade into the dark under
  *           "Bangalore International School presents"
  *   9 s     a spark bursts into a spiral galaxy of particles
@@ -873,6 +944,8 @@ async function runIntro(orbReady) {
   if (token.cancelled) return;
   if (flew) {
     place.classList.remove('is-show');
+    await journey.playClip(token); // the campus, if its clip is there and can play
+    if (token.cancelled) return;
     show(caption);
     await journey.fadeOut(token);
     if (token.cancelled) return;
@@ -1324,7 +1397,7 @@ function initOdometer() {
 /* 70 · How it works: the gravity well -------------------------------------------------
  * A wireframe funnel drawn in 3D on a 2D canvas. As you scroll through the
  * pinned section the camera tilts from a low angle to looking straight down,
- * the seven event chips spiral into the well, and at "Compete" an orb rises
+ * the event chips spiral into the well, and at "Compete" an orb rises
  * out of it. Lines only, so it stays cheap enough for phones.
  */
 
@@ -1337,6 +1410,7 @@ const WELL_ICONS = {
   recycle: 'M19.5 12a7.5 7.5 0 0 1-13.2 4.9M4.5 12a7.5 7.5 0 0 1 13.2-4.9M18 3.5v3.9h-3.9M6 20.5v-3.9h3.9',
   drone: 'M10.7 10h2.6a1.2 1.2 0 0 1 1.2 1.2v1.6a1.2 1.2 0 0 1-1.2 1.2h-2.6a1.2 1.2 0 0 1-1.2-1.2v-1.6a1.2 1.2 0 0 1 1.2-1.2ZM9.5 11 6.2 8.2M14.5 11l3.3-2.8M9.5 13l-3.3 2.8M14.5 13l3.3 2.8M2.5 7h6M15.5 7h6M2.5 17h6M15.5 17h6',
   browser: 'M5.5 4.5h13a2.5 2.5 0 0 1 2.5 2.5v10a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17V7a2.5 2.5 0 0 1 2.5-2.5ZM3 8.5h18M10 12l-2.5 2.25L10 16.5M14 12l2.5 2.25L14 16.5',
+  logic: 'M14.2 5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M7.7 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M14.2 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M20.7 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M12 7.2v9.1M10.4 6.6 6.6 16.5M13.6 6.6l3.8 9.9',
 };
 
 function createWell(section) {

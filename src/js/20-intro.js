@@ -2,7 +2,9 @@
  * About fourteen seconds, on every page load, never with reduced motion:
  *   0 s     the Earth from space; the camera falls through real satellite
  *           images: India, South India, Bengaluru, then the streets around
- *           the school (15-journey.js)
+ *           the school (15-journey.js), and, when its clip is there, a
+ *           few seconds of Google Earth Studio footage down to the campus
+ *           (everything after this moves later by the clip's length)
  *   7.6 s   the streets fade into the dark under
  *           "Bangalore International School presents"
  *   9 s     a spark bursts into a spiral galaxy of particles
@@ -90,6 +92,8 @@ async function runIntro(orbReady) {
   if (token.cancelled) return;
   if (flew) {
     place.classList.remove('is-show');
+    await journey.playClip(token); // the campus, if its clip is there and can play
+    if (token.cancelled) return;
     show(caption);
     await journey.fadeOut(token);
     if (token.cancelled) return;

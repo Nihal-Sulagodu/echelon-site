@@ -132,6 +132,31 @@ Three other ways were built and measured first. Lighthouse in the build containe
 
 The LCP fix is a real one, not a trick. Each layer starts fading in while it's a third of the screen wide, so its first paint is smaller than the opening globe. That makes the globe, which is preloaded, the page's LCP (2.2–2.4 s on simulated slow 4G).
 
+### The campus: a Google Earth Studio clip
+
+On 28 October 2026 Nihal asked for the zoom to go all the way into the school.
+
+**Rejected:**
+- *Copying from Google Maps:* against Google's terms.
+- *Live tiles from Google's Map Tiles API:* built, tested against a stand-in server, then dropped. It needed a Google Cloud account with billing, and every visit loaded 35–50 billed tiles from Google.
+- *A drone photo from the school:* still the sharpest option, but it depends on BIS having one.
+
+**Chosen: Google Earth Studio.** It's free, Google stamps its own credit onto the footage, and the footage may be used for education and non-profit work.
+
+**How it fits on:**
+- Two renders, landscape and portrait, zoom straight down from about 11.5 km across to the campus in 4 s.
+- `tools/intro-imagery/campus-clip.sh` encodes each as AV1 WebM and H.264 MP4, each under 1.1 MB. With the clip, a laptop's page weight measured 2.94 MB, so a 2 MB clip would have broken the 3 MB budget.
+- The script writes `assets/intro/campus.json`, including `startKm`: the ground across the first frame's longer side.
+- The satellite zoom ends on exactly what that first frame shows on the current screen, allowing for the crop of `object-fit: cover`. Then the clip fades in over 0.25 s and plays.
+
+**Loading:**
+- Only the clip that matches the screen's shape loads.
+- It starts 1.5 s into the zoom. Loading it straight after the satellite images, before the globe's first paint, put it in front of the LCP in Lighthouse's slow-4G simulation: mobile performance fell to 60 with LCP 6.9 s. Delayed, it scored 90 (87, 90, 92) with LCP 2.25 s. Desktop scored 99.
+
+**Fallback:** If the clip isn't ready 2 s after the satellite zoom ends, or `play()` is refused (Low Power Mode on iPhones blocks autoplay), the intro carries on without it.
+
+**Tested with stand-in clips.** I cut them from the Sentinel image, with a crosshair on the campus point. The cut from the last satellite frame into the clip was seamless on a laptop (1440 × 900) and a phone (390 × 844). The intro lasted 19.1 s, and the browser tests passed: the intro-length check now allows 22 s when a clip is present. The real Earth Studio footage hasn't been tried yet.
+
 ### Rules
 
 - **Real progress.** The bar at the bottom fills as real things finish: the satellite images, the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.
@@ -286,15 +311,16 @@ The LCP fix is a real one, not a trick. Each layer starts fading in while it's a
 
 ## 10. Content
 
-- **Filled in from the Echelon 3.0 website** (bisechelon.in/echelon3.0):
-  - the seven events (Escape Room, Game Design, Treasure Hunt, Shark Tank, E-Waste Reimagined, Drone Race, Web Designing) with their grades, team sizes, durations and rules;
-  - 8:30 am to 1:30 pm at Bangalore International School;
-  - the tagline "Igniting the next generation.";
-  - the registration link.
-- **These are last year's facts.** `content.json` says so in its `_source` note.
-- **The registration link is last year's Google Form.** It still accepts responses, but it's titled "ECHELON 2026". It needs to be swapped for this year's form.
-- **The date** (Saturday, 21 November 2026) comes from the BIS 2026–27 school calendar in Nihal's Notion, which lists "ECHELON 4.0" that day. The calendar gives no time, so the countdown targets last year's 8:30 am start.
-- **Still a placeholder:** the contact email, which nothing on the old site gave.
+**Updated on 28 October 2026 from the Echelon 4.0 programme document** ("Echelon 4.0 – High School Competitions"), sent by Nihal:
+- **Eight events.** The seven from last year, rewritten to this year's descriptions, plus **Artificial Intelligence – Prolog Expert System Challenge**, which got a new icon: a small knowledge tree. Each event now has its **time** and **room**, shown on its card. The description, rules and what to bring are taken from the document, reworded only for the page.
+- **The day:** reporting, registration and breakfast at 8:15 am, the opening ceremony (the document's "Inauguration") at 9:00, competitions from 9:30, lunch at 12:45 and prize distribution from 1:30 to 2:30 pm. The countdown now counts to 8:15 am, and the schedule clock runs from 08:15 to 14:30.
+- **Grades:** the document opens every competition to Grades 8–12, so last year's 9–12 limits on Treasure Hunt and Shark Tank are gone.
+- **Removed:**
+  - **The prize amounts**, at Nihal's request.
+  - Last year's details the document contradicts: the "glass room" Escape Room, the Excel-based Treasure Hunt, the 25 × 25 × 5 cm drone limit, and the "Sawubona" theme for Shark Tank and Web Designing.
+- **Not in the document, so placeholders:** each event's team size and teams per school (last year's numbers weren't kept, in case they changed), and the contact email. `mahenthren@bischool.in` appears only for Shark Tank slides, so it isn't assumed to be the general contact.
+- **Durations:** each event's time slot replaces last year's durations. The only duration kept is Shark Tank's 3–5 minute pitch.
+- **Still last year's:** the registration link, a Google Form titled "ECHELON 2026". It needs this year's form.
 
 ---
 

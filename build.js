@@ -48,6 +48,16 @@ if (fs.existsSync(file('assets/intro/manifest.json'))) {
 } else {
   console.warn('  ! assets/intro/manifest.json is missing, so the intro has no zoom from space.');
 }
+// The campus clip from Google Earth Studio, if it has been added (see README). Only used
+// when every file it lists is there.
+if (fs.existsSync(file('assets/intro/campus.json'))) {
+  const clip = JSON.parse(fs.readFileSync(file('assets/intro/campus.json'), 'utf8'));
+  const files = ['landscape', 'portrait'].flatMap((k) => (clip[k]?.files || []).map(([f]) => `assets/intro/${f}`));
+  const missing = files.filter((f) => !fs.existsSync(file(f)));
+  if (!clip.startKm || !clip.landscape || !clip.portrait) fail('assets/intro/campus.json needs "startKm", "landscape" and "portrait".');
+  if (missing.length) fail(`assets/intro/campus.json lists files that aren't there: ${missing.join(', ')}`);
+  content._introClip = { startKm: clip.startKm, landscape: clip.landscape, portrait: clip.portrait };
+}
 
 /* ---------- checks -------------------------------------------------------- */
 
@@ -68,7 +78,7 @@ if (email && !hasPlaceholder(email) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   errors.push(`contact.email "${email}" doesn't look like an email address.`);
 }
 const ids = new Set();
-const ICONS = ['key', 'gamepad', 'compass', 'fin', 'recycle', 'drone', 'browser'];
+const ICONS = ['key', 'gamepad', 'compass', 'fin', 'recycle', 'drone', 'browser', 'logic'];
 for (const e of content.events?.items || []) {
   if (!/^[a-z0-9-]+$/.test(e.id || '')) errors.push(`event id "${e.id}" should use only lowercase letters, numbers and dashes.`);
   if (ids.has(e.id)) errors.push(`event id "${e.id}" is used twice.`);
