@@ -1397,7 +1397,7 @@ function initOdometer() {
 /* 70 · How it works: the gravity well -------------------------------------------------
  * A wireframe funnel drawn in 3D on a 2D canvas. As you scroll through the
  * pinned section the camera tilts from a low angle to looking straight down,
- * the seven event chips spiral into the well, and at "Compete" an orb rises
+ * the event chips spiral into the well, and at "Compete" an orb rises
  * out of it. Lines only, so it stays cheap enough for phones.
  */
 
@@ -1410,6 +1410,7 @@ const WELL_ICONS = {
   recycle: 'M19.5 12a7.5 7.5 0 0 1-13.2 4.9M4.5 12a7.5 7.5 0 0 1 13.2-4.9M18 3.5v3.9h-3.9M6 20.5v-3.9h3.9',
   drone: 'M10.7 10h2.6a1.2 1.2 0 0 1 1.2 1.2v1.6a1.2 1.2 0 0 1-1.2 1.2h-2.6a1.2 1.2 0 0 1-1.2-1.2v-1.6a1.2 1.2 0 0 1 1.2-1.2ZM9.5 11 6.2 8.2M14.5 11l3.3-2.8M9.5 13l-3.3 2.8M14.5 13l3.3 2.8M2.5 7h6M15.5 7h6M2.5 17h6M15.5 17h6',
   browser: 'M5.5 4.5h13a2.5 2.5 0 0 1 2.5 2.5v10a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17V7a2.5 2.5 0 0 1 2.5-2.5ZM3 8.5h18M10 12l-2.5 2.25L10 16.5M14 12l2.5 2.25L14 16.5',
+  logic: 'M14.2 5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M7.7 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M14.2 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M20.7 18.5a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0M12 7.2v9.1M10.4 6.6 6.6 16.5M13.6 6.6l3.8 9.9',
 };
 
 function createWell(section) {

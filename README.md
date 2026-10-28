@@ -6,7 +6,7 @@ A one-page website for **Echelon**, the interschool tech fest run by Bangalore I
 
 - The look is black and minimal, with a glowing particle orb, glass panels and a liquid-glass cursor.
 - The intro falls from space to the school through real satellite images (Sentinel-2), then the particles form the word "Echelon".
-- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The event details come from last year's Echelon 3.0 site. One thing is still a placeholder: the contact email.
+- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Still placeholders: team sizes, teams per school and the contact email.
 - Mobile Lighthouse (28 October 2026, in a container with no GPU, which is harsher than a normal machine): 93 performance, 100 accessibility, 96 best practices, 100 SEO, median of 3 runs. Desktop scores 100 for performance. The 96 in best practices only happened because the fonts couldn't be downloaded in that container.
 - Browser tests: 78 of 79 checks pass. The one failure is the same two missing font files.
 - Details are in [`reports/`](reports/README.md).
@@ -50,6 +50,9 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 | Where in `content.json` | What it needs |
 |---|---|
+| `events.items[n].teamSize` | Each event's team size (all eight events) |
+| `events.items[n].teamsPerSchool` | How many teams each school can send to each event (all eight) |
+| `faq.items[2].a` | The answer to "How big is a team, and how many can a school send?" |
 | `contact.email` | The email address for questions |
 | `faq.items[7].a` | The answer to "Who do we contact with questions?", which needs the same email |
 
@@ -57,21 +60,20 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 ### Filled in from other sources, so check before launch
 
-- **The date:** Saturday, 21 November 2026, from the BIS 2026–27 school calendar, which lists "ECHELON 4.0" that day. The calendar gives no time, so the countdown uses last year's 8:30 am start.
-- **Everything else** comes from the Echelon 3.0 website (January 2026), so it's last year's details: the events, rules, team sizes, grades, timings (8:30 am to 1:30 pm), the venue, the tagline "Igniting the next generation." and the registration link.
+- **The events and the day:** from the Echelon 4.0 programme document ("Echelon 4.0 – High School Competitions", October 2026). That covers the eight events, their times, rooms, descriptions and rules, and the programme: reporting at 8:15 am, the opening ceremony at 9:00, lunch at 12:45 and prize distribution from 1:30 to 2:30 pm. The countdown counts to the 8:15 am reporting time.
+- **Left out on purpose:** the prize amounts.
 - **The registration link is last year's Google Form.** It still opens, but its title is "ECHELON 2026". Put this year's form in `event.registrationUrl`.
-- Check each event in `events.items` against this year's rules.
 
 ### Changing the event date (the countdown)
 
 In `content.json`, set:
 
 ```json
-"date": "2026-11-21T08:30:00+05:30",
+"date": "2026-11-21T08:15:00+05:30",
 "dateText": "Saturday, 21 November 2026",
 ```
 
-- `date` drives the LCD countdown in the hero. Keep the `+05:30` at the end, which is India time. If the start time changes, change the `08:30` part.
+- `date` drives the LCD countdown in the hero. Keep the `+05:30` at the end, which is India time. If the start time changes, change the `08:15` part.
 - Leave `date` as `""` and the page says "Date to be announced" instead of counting.
 - Once the time has passed, the countdown says "Echelon is happening now".
 
@@ -270,9 +272,8 @@ To change something on the live site:
 
 ### Before telling people about it
 
-1. Set the contact email. `node build.js` should print "No placeholders left."
-2. Swap in this year's registration form and check the event details.
-3. Confirm the date and the 8:30 am start.
+1. Fill in the team sizes, teams per school and contact email. `node build.js` should print "No placeholders left."
+2. Swap in this year's registration form.
 
 ### Moving to bisechelon.in later
 

@@ -154,7 +154,8 @@ try {
     await page.goto(BASE, { waitUntil: 'load' });
     check('main heading renders', (await page.getByRole('heading', { level: 1, name: 'Echelon' }).count()) === 1);
     check('intro is not shown', !(await page.locator('#intro').isVisible()));
-    check('all 7 event cards render', (await page.locator('.ev').count()) === 7);
+    const eventCount = JSON.parse(fs.readFileSync(path.join(root, 'content.json'), 'utf8')).events.items.length;
+    check(`all ${eventCount} event cards render`, (await page.locator('.ev').count()) === eventCount);
     const summary = page.locator('.ev__details summary').first();
     check('rules use <details> (no JS needed)', await summary.isVisible());
     await summary.click();

@@ -311,15 +311,16 @@ On 28 October 2026 Nihal asked for the zoom to go all the way into the school.
 
 ## 10. Content
 
-- **Filled in from the Echelon 3.0 website** (bisechelon.in/echelon3.0):
-  - the seven events (Escape Room, Game Design, Treasure Hunt, Shark Tank, E-Waste Reimagined, Drone Race, Web Designing) with their grades, team sizes, durations and rules;
-  - 8:30 am to 1:30 pm at Bangalore International School;
-  - the tagline "Igniting the next generation.";
-  - the registration link.
-- **These are last year's facts.** `content.json` says so in its `_source` note.
-- **The registration link is last year's Google Form.** It still accepts responses, but it's titled "ECHELON 2026". It needs to be swapped for this year's form.
-- **The date** (Saturday, 21 November 2026) comes from the BIS 2026–27 school calendar in Nihal's Notion, which lists "ECHELON 4.0" that day. The calendar gives no time, so the countdown targets last year's 8:30 am start.
-- **Still a placeholder:** the contact email, which nothing on the old site gave.
+**Updated on 28 October 2026 from the Echelon 4.0 programme document** ("Echelon 4.0 – High School Competitions"), sent by Nihal:
+- **Eight events.** The seven from last year, rewritten to this year's descriptions, plus **Artificial Intelligence – Prolog Expert System Challenge**, which got a new icon: a small knowledge tree. Each event now has its **time** and **room**, shown on its card. The description, rules and what to bring are taken from the document, reworded only for the page.
+- **The day:** reporting, registration and breakfast at 8:15 am, the opening ceremony (the document's "Inauguration") at 9:00, competitions from 9:30, lunch at 12:45 and prize distribution from 1:30 to 2:30 pm. The countdown now counts to 8:15 am, and the schedule clock runs from 08:15 to 14:30.
+- **Grades:** the document opens every competition to Grades 8–12, so last year's 9–12 limits on Treasure Hunt and Shark Tank are gone.
+- **Removed:**
+  - **The prize amounts**, at Nihal's request.
+  - Last year's details the document contradicts: the "glass room" Escape Room, the Excel-based Treasure Hunt, the 25 × 25 × 5 cm drone limit, and the "Sawubona" theme for Shark Tank and Web Designing.
+- **Not in the document, so placeholders:** each event's team size and teams per school (last year's numbers weren't kept, in case they changed), and the contact email. `mahenthren@bischool.in` appears only for Shark Tank slides, so it isn't assumed to be the general contact.
+- **Durations:** each event's time slot replaces last year's durations. The only duration kept is Shark Tank's 3–5 minute pitch.
+- **Still last year's:** the registration link, a Google Form titled "ECHELON 2026". It needs this year's form.
 
 ---
 

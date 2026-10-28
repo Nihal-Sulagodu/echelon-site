@@ -78,7 +78,7 @@ if (email && !hasPlaceholder(email) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   errors.push(`contact.email "${email}" doesn't look like an email address.`);
 }
 const ids = new Set();
-const ICONS = ['key', 'gamepad', 'compass', 'fin', 'recycle', 'drone', 'browser'];
+const ICONS = ['key', 'gamepad', 'compass', 'fin', 'recycle', 'drone', 'browser', 'logic'];
 for (const e of content.events?.items || []) {
   if (!/^[a-z0-9-]+$/.test(e.id || '')) errors.push(`event id "${e.id}" should use only lowercase letters, numbers and dashes.`);
   if (ids.has(e.id)) errors.push(`event id "${e.id}" is used twice.`);
