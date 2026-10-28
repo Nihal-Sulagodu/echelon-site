@@ -89,35 +89,64 @@ There are no illustrations, which keeps everything looking like material and lig
 
 ## 3. Loading intro
 
-**About 6.5 seconds, on every page load.**
+**About 14 seconds, on every page load.** Changed twice since the redesign. On 26 October 2026 a flight in from space, drawn as coloured dots and following a V of migrating birds, was added in front of the particle intro. On 28 October Nihal asked for real images instead of particles, and for the birds to go for now. The flight is now real satellite imagery and has no birds.
 
 | Time | What happens |
 |---|---|
-| 0.25 s | "Bangalore International School presents" |
-| 1.25 s | A spark bursts into a three-armed spiral galaxy of particles |
-| 2.45 s | The particles fly into the word "Echelon", left to right |
-| 3.85 s | "Igniting the next generation." |
-| 4.85 s | The word collapses into a sphere, which glides into its place in the hero while the black veil lifts |
+| 0 s | The Earth from space, centred on India. The camera falls through eight satellite images: India, South India, Bengaluru, then the streets around the school. A pulsing amber pin marks the school until the streets are in view, with the place names as captions |
+| 7.6 s | The streets fade into the dark under "Bangalore International School presents" |
+| 9 s | A spark bursts into a three-armed spiral galaxy of particles |
+| 10.2 s | The particles fly into the word "Echelon" |
+| 11.6 s | The tagline |
+| 12.6 s | The word collapses into a sphere, which glides into its place in the hero while the black veil lifts |
 
-Measured in a fresh browser on a laptop:
-- the galaxy starts at 1.45 s;
-- the tagline appears at 4.06 s;
-- the intro is gone at 6.67 s.
+Measured: the intro is gone 14.7 s after navigation (the browser test allows up to 17 s).
 
-With the CPU slowed 4× (a cheap phone), it's gone at 6.98 s.
+### The imagery
 
-- **Real progress.** The bar at the bottom fills as real things finish: the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.
+- **Sources, all free to use with credit** (`assets/CREDITS.md`):
+  - the Sentinel-2 120 m cloudless mosaic for February 2020 (Sinergise, CC BY 4.0), for the globe down to about 250 km across;
+  - two Sentinel-2 scenes from the same satellite pass on 6 February 2026, at 10 m per pixel, for Bengaluru and closer. They are nearly cloud-free (0.0003% and 0.05% cloud).
+  - Both come from the AWS Open Data buckets, which this project's build environment can reach. NASA, Wikimedia, Unsplash and Pexels were blocked from it.
+- **One map, cropped tighter each time.** `tools/intro-imagery/make.py` reprojects everything into one orthographic view looking straight down on the school (13.0474° N, 77.6466° E). Each level is a square about 2.7× narrower than the one before: 13,400, 4,800, 1,800, 680, 256, 96, 36 and 13.5 km. Because every level is the same projection with the same centre, they line up exactly as the camera zooms. A Google-Earth-style map projection would drift between levels.
+- **Colour.** One tone curve for every level, so the levels match as they cross-fade. Sentinel-2 doesn't image the open ocean, so open sea is filled with a deep blue, lighter over the continental shelf. The real coastal water is kept within about 15 km of land, using the NOAA GLOBE 1 km land mask (public domain) to tell land from sea. The globe gets a darker limb and a thin atmosphere line.
+- **The closest level is the honest limit.** Free satellite imagery stops at 10 m per pixel, so the zoom ends on the school's neighbourhood, about 11 km across, not on the campus itself. A campus close-up needs aerial or drone imagery. Google, Bing and Esri imagery can't be copied into a site, so this would have to be a photo the school owns (see the README).
+- **Sizes.** Each level is saved at 1280, 1920 and 2560 px as AVIF, plus WebP up to 1920 for browsers without AVIF (Safari before 16.4). The page picks the smallest size that covers the screen's longer side at up to 2× pixel density. Phones with 2 GB of memory or less get 1280.
+  - The intro downloads 1.1 MB at 1280, 1.6 MB at 1920 or 2.3 MB at 2560.
+  - Images are fetched in order, nearest-to-space first. The `<head>` script preloads the first two so they don't wait for `main.js`.
+  - If an image is late, the camera holds on the closest one that has loaded, for 4 s at most, rather than showing a blurry close-up.
+
+### How it's drawn
+
+Each level is a full-screen layer with its image as a centred background, resized every frame. The middle levels have a soft edge (12% of their width) stored as transparency in the image, so a closer level fades in while it covers only the middle of the screen, before the one behind it gets blurry. The closest level has hard edges, so it waits until it fills the screen and then fades in.
+
+Three other ways were built and measured first. Lighthouse in the build container, with no GPU, was the hardest test. In the same container the old dot-map intro scores 73 on mobile.
+
+| Approach | Mobile score | Why not |
+|---|---|---|
+| `<img>` tags scaled with CSS transforms, soft edges as CSS masks | 81 | Chrome counted the India image as the page's Largest Contentful Paint at 4.3 s, when it faded in. |
+| A 2D canvas | 63 | Drawing large images on a canvas without a GPU took 80–160 ms a frame on the main thread. |
+| WebGL | 63 | Same problem in software rendering: 8 s of blocking time. |
+| Background layers with CSS masks | 70 (desktop 60) | Re-drawing the masks every frame without a GPU took 2.4 s of blocking time on desktop. |
+| **Background layers with the soft edges baked into the images (used)** | **93–96 (desktop 99–100)** | — |
+
+The LCP fix is a real one, not a trick. Each layer starts fading in while it's a third of the screen wide, so its first paint is smaller than the opening globe. That makes the globe, which is preloaded, the page's LCP (2.2–2.4 s on simulated slow 4G).
+
+### Rules
+
+- **Real progress.** The bar at the bottom fills as real things finish: the satellite images, the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.
 - **Skip intro** is in the HTML, visible from the first frame, and also works with Esc.
-- **Rules:**
-  - The intro plays on every page load, refreshes included. It first played once per session; Nihal asked for every refresh on 23 October 2026. Skip and Esc still end it at any point.
-  - It never plays with reduced motion or with effects off.
-  - A failsafe in `<head>` removes it after 9 s even if the script never loads.
+- The intro plays on every page load, refreshes included. It first played once per session; Nihal asked for every refresh on 23 October 2026. Skip and Esc still end it at any point.
+- It never plays with reduced motion or with effects off.
+- A failsafe in `<head>` removes it after 20 s even if the script never loads.
+- The scrollbar gutter is turned off while the intro shows. Otherwise Chrome paints an empty dark strip down the right edge of the photos on desktops with visible scrollbars.
 - **Tagline spacing.** The tagline's position is worked out from the particle word's real size: the orb's scale is `min(23.5vw, 42vh)`, and the word's lowest dots sit 0.267 of that below the centre. The tagline starts a gap of 14% of the scale below that (at least 28 px).
-  - Before, it moved with screen width only. That left a 2 px gap at 1440 × 900 and made it overlap the word at 1920 × 1080.
-  - Now the gap is 42–63 px on laptops and desktops, and 28 px on phones and tablets.
 - While the intro shows, the page underneath is `inert`, so keyboard users can't tab into hidden links.
-- **Fallback:** if WebGL isn't available, or the orb isn't ready 0.9 s after the caption, a text-only version plays (the word fades in and out).
-- *Rejected:* a video (weight, and no real progress), and the first version's 2-second slice-in, which was called short and lame.
+- **Fallbacks:** if the first image can't load, the intro starts at the caption. If WebGL isn't available, or the orb isn't ready 0.9 s after the caption, a text-only version of the word plays.
+- **The birds are switched off, not deleted.** `BIRDS` at the top of `birdRoles()` in `src/js/10-orb.js` brings back the V formations around the hero orb. The intro's birds were part of the dot map, which is gone. The tagline "Like migrating birds, we rise in formation." is unchanged. It lives in `content.json` (`event.tagline`).
+- *Rejected:*
+  - a video of the zoom, which would be heavier for the same sharpness, can't reframe for portrait and landscape, and the brief caps videos at 2 MB;
+  - the first version's 2-second slice-in, which was called short and lame.
 
 ---
 
@@ -233,14 +262,14 @@ With the CPU slowed 4× (a cheap phone), it's gone at 6.98 s.
   Arial covers Windows, macOS and iOS; Roboto covers Android.
 - **Two small changes on phones:** the hero summary reserves four lines, and the hero buttons stack below 480 px. A different line break during the font swap can't move anything.
 - **The orb's start-up** no longer blocks the page (section 4).
-- **Page weight:**
-  - 168 KB at load on a phone;
-  - 185 KB after scrolling the whole page;
-  - well under the brief's 3 MB.
-- **Lighthouse:**
-  - Mobile scores 99 (median of 3).
-  - Desktop scores 100.
-  - In five extra runs, each in a fresh browser (the hardest case, like PageSpeed Insights), mobile scored 99 every time.
+- **Page weight** (most of it is the intro's satellite images, section 3):
+  - 1.9 MB at load on a phone or a 1440 px laptop;
+  - about 2.5 MB on 4K and large high-density screens;
+  - under the brief's 3 MB in every case. Without the intro (reduced motion, or effects off) it's about 170 KB.
+- **Lighthouse,** re-run on 28 October 2026 in the build container. It has no GPU, so it's harsher than the 23 October runs, where the old intro scored 99 and 100. In this container the old intro scores 73 and 90.
+  - Mobile scores 93 (median of 3: 92, 93, 97). LCP is 2.2 s and Total Blocking Time 252 ms.
+  - Desktop scores 100 (99, 100, 100).
+  - Best practices is 96 only because the Fontshare fonts couldn't be downloaded in that container (two 404s). On GitHub Pages the deploy downloads them.
   - See `reports/LIGHTHOUSE.md`.
 - `tools/serve.mjs` gzips text files and sends `cache-control: no-cache`, like a normal host.
 

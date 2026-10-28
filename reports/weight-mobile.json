@@ -1,10 +1,18 @@
 {
-  "total": 182821,
-  "files": 10,
+  "total": 1963264,
+  "files": 18,
   "list": [
     {
-      "name": "js/main.js?v=52eb063cb3",
-      "bytes": 30609
+      "name": "js/main.js?v=b04b3449cc",
+      "bytes": 26538
+    },
+    {
+      "name": "assets/intro/earth-0-1920.avif",
+      "bytes": 101521
+    },
+    {
+      "name": "assets/intro/earth-1-1920.avif",
+      "bytes": 107537
     },
     {
       "name": "",
@@ -12,11 +20,11 @@
     },
     {
       "name": "assets/fonts/fontshare/cabinet-grotesk-500.woff2",
-      "bytes": 20560
+      "bytes": 300
     },
     {
       "name": "assets/fonts/fontshare/satoshi-variable.woff2",
-      "bytes": 42888
+      "bytes": 300
     },
     {
       "name": "assets/fonts/dseg/DSEG7Classic-Bold.woff2",
@@ -37,6 +45,30 @@
     {
       "name": "js/vendor/ScrollTrigger.min.js?v=3.15.0",
       "bytes": 18303
+    },
+    {
+      "name": "assets/intro/earth-2-1920.avif",
+      "bytes": 76517
+    },
+    {
+      "name": "assets/intro/earth-3-1920.avif",
+      "bytes": 198882
+    },
+    {
+      "name": "assets/intro/earth-4-1920.avif",
+      "bytes": 307862
+    },
+    {
+      "name": "assets/intro/earth-5-1920.avif",
+      "bytes": 393131
+    },
+    {
+      "name": "assets/intro/earth-6-1920.avif",
+      "bytes": 459807
+    },
+    {
+      "name": "assets/intro/earth-7-1350.avif",
+      "bytes": 201529
     }
   ]
 }

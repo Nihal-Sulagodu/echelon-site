@@ -1,39 +1,42 @@
 # Reports
 
-Results from the final build of version 2 (the redesign) on 23 October 2026. To re-run them: `npm test` and `npm run lighthouse` (see the main README).
+Results from 28 October 2026, after the intro moved to real satellite images. To re-run them: `npm test` and `npm run lighthouse` (see the main README).
+
+**Where they were run.** These runs were made in a cloud container with no GPU, so every frame was drawn by the CPU. That is harsher than a normal phone or laptop. For comparison, in the same container the previous version (the dot-map intro) scored 73 on mobile and 90 on desktop. On 23 October, on a machine with a GPU, it had scored 99 and 100. The Fontshare fonts couldn't be downloaded in the container, which causes two 404 errors. Those 404s are behind best practices 96 and the one failed browser check. The GitHub Pages deploy downloads the fonts, so the live site doesn't have them.
 
 ## Lighthouse ([LIGHTHOUSE.md](LIGHTHOUSE.md))
 
 | | Performance | Accessibility | Best practices | SEO |
 |---|---|---|---|---|
-| **Mobile** (Moto G Power, slow 4G, simulated; median of 99, 99, 99) | **99** | 100 | 100 | 100 |
-| **Desktop** (median of 100, 100, 100) | **100** | 100 | 100 | 100 |
+| **Mobile** (Moto G Power, slow 4G, simulated; median of 92, 93, 97) | **93** | 100 | 96 | 100 |
+| **Desktop** (median of 99, 100, 100) | **100** | 100 | 96 | 100 |
 
 Mobile metrics:
 
 | Metric | Result |
 |---|---|
-| First Contentful Paint | 1.50 s |
-| Largest Contentful Paint | 1.73 s |
-| Total Blocking Time | 0 ms |
+| First Contentful Paint | 1.05 s |
+| Largest Contentful Paint | 2.24 s (the opening globe of the intro) |
+| Total Blocking Time | 252 ms |
 | Cumulative Layout Shift | 0.000 |
-| Speed Index | 1.50 s |
-| Page weight | 167 KB |
+| Speed Index | 2.56 s |
+| Page weight | 1.9 MB, mostly the intro's satellite images |
 
-The brief's target was 85 or higher on mobile.
+The brief's target was 85 or higher on mobile, and under 3 MB.
 
-**Fresh-browser runs.** The first visit in a fresh browser is the hardest case, and it's how PageSpeed Insights tests. In five extra mobile runs, each in a newly started Chrome, every run scored 99 with 0 ms of blocking time. Before the GPU warm-up fix (`DECISIONS.md`, section 4), the first run in a fresh browser scored 84 because of a 688 ms freeze while the GPU started up.
+**Remaining Lighthouse warnings:**
 
-**Remaining Lighthouse warnings (neither affects the score):**
+- *Browser errors were logged to the console*: the two missing font files (see above).
+- *Minify JavaScript (8 KiB)*: `js/main.js` is left readable on purpose, so students can learn from it and change it.
+- *Network dependency tree*, *LCP request discovery*: information-only items that list the request chain.
 
-- *Minify JavaScript (6 KiB)*: `js/main.js` is left readable on purpose, so students can learn from it and change it. Shrinking it would need an extra build tool for a few KB.
-- *Network dependency tree*: this is an information-only item that lists the request chain. It isn't a failure.
+**One desktop run of an earlier attempt scored 91 for accessibility.** The tool's contrast check caught the intro caption mid-fade, when it was almost transparent over the black background. It's an artefact of timing, not a real failure: the caption is white on dark once it has faded in. The final runs scored 100.
 
 Open `lighthouse-mobile.html` or `lighthouse-desktop.html` in a browser to see the full reports.
 
 ## Browser tests ([TEST-REPORT.md](TEST-REPORT.md))
 
-**79 of 79 checks passed.** They cover:
+**78 of 79 checks passed.** The one failure is "no JavaScript errors", caused by the two font files that couldn't be downloaded in the test container. They cover:
 
 - JavaScript turned off.
 - Reduced motion at 375 and 1440 px.

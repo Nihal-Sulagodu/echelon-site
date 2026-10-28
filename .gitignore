@@ -7,3 +7,4 @@ assets/fonts/fontshare/*.woff2
 
 # Made by the deploy workflow
 _site/
+.cache/
