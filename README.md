@@ -134,45 +134,44 @@ node build.js
 
 It downloads about 1 GB from Amazon's open satellite archive and takes around 10 minutes. The settings (which days, which levels, file sizes) are at the top of the script.
 
-### Zooming in to the campus (Google Maps)
+### Zooming in to the campus (Google Earth Studio)
 
-Free satellite pictures are 10 m per pixel, too coarse to show the school's buildings, so on their own the zoom stops at the neighbourhood. With a Google Maps key, it carries on down to the campus using Google's satellite imagery.
+Free satellite pictures are 10 m per pixel, too coarse to show the school's buildings, so the satellite zoom stops at the streets around the school. The last few seconds, down to the campus, are a clip rendered in **Google Earth Studio**, Google's free tool for making videos from Google Earth imagery.
 
-Google's terms don't allow saving their imagery, so it isn't stored in this project. The last two or three frames are built from Google's map tiles in each visitor's browser while the intro plays. Without a key, or if Google's tiles can't load (a wrong key, or a school network that blocks Google), the zoom simply ends on the neighbourhood as before.
+- Earth Studio stamps the required credit ("Google Earth" and the imagery providers) onto every frame. Google requires it to stay visible, so don't crop or cover it.
+- Google allows Earth Studio footage for education and non-profit use, with that credit.
+- Without the clip files, the intro ends on the streets as before.
 
-**1. Get a key** (once):
+**1. Render two clips in Earth Studio** (https://earth.google.com/studio/, Chrome only, Google account needed):
 
-1. Go to https://console.cloud.google.com, create a project, and set up billing. Google needs this even for free use.
-2. Under **APIs & Services → Library**, enable **Map Tiles API**.
-3. Under **APIs & Services → Credentials**, create an **API key**, then restrict it:
-   - **Application restrictions:** Websites, with `nihal-sulagodu.github.io/*` and `bisechelon.in/*` (add `127.0.0.1/*` if you want to test locally).
-   - **API restrictions:** Map Tiles API only.
+| | Landscape | Portrait |
+|---|---|---|
+| Size | 1920 × 1080 | 1080 × 1920 |
+| Length | 4 s at 30 fps (120 frames) | same |
+| Camera position, both keyframes | longitude `77.6467`, latitude `13.04722` | same |
+| Camera rotation, both keyframes | tilt `0` (straight down), heading `0` (north up) | same |
+| Altitude, first frame | `18300` m above the ground | `32600` m |
+| Altitude, last frame | `2300` m | `4000` m |
 
-The key ends up in the page's code, where anyone can read it. That's normal for Google Maps keys, and the two restrictions are what stop others from using it.
+- Add `900` to each altitude if Earth Studio only offers height above sea level.
+- In **Add attributes**, leave **Time of Day**, **Clouds** and **Field of View** unticked.
+- When rendering, use **Texture quality: High** and **Attribution: bottom centre**. That spot is never cropped on any screen shape.
 
-**2. Try it** without changing anything: add `?gmaps=YOUR_KEY` to the address, for example `https://nihal-sulagodu.github.io/echelon-site/?gmaps=YOUR_KEY`. Only your tab uses it.
+**2. Turn the frames into the site's videos.** You need ffmpeg:
 
-**3. Turn it on for everyone:** in `content.json`, set
-
-```json
-"intro": {
-  "googleMapsKey": "YOUR_KEY",
-  "campus": { "lat": 13.04722, "lon": 77.6467, "widthKm": 0.8 }
-}
+```
+tools/intro-imagery/campus-clip.sh path/to/landscape-frames path/to/portrait-frames 11.5
+node build.js
 ```
 
-then run `node build.js`.
+The script makes `campus-landscape` and `campus-portrait` videos in `assets/intro/` (AV1 WebM plus H.264 MP4, each under 1.1 MB) and writes `assets/intro/campus.json`.
 
-- `campus.lat` and `campus.lon` are the centre of the final view. They start at the centre of the school's outline on OpenStreetMap. Nudge them if the campus isn't centred.
-- `widthKm` is how much ground fits across the screen's shorter side at the end. Make it smaller to get closer.
+The last number is how many km the first frame shows across its longer side. The satellite zoom ends on exactly that view, so the cut into the clip is seamless. With the altitudes above it should be 11.5. If the cut looks like it jumps in or out, adjust that number and rebuild.
 
-**Cost.** Each visit to the intro loads about 35–50 of Google's tiles: more on large, sharp screens, fewer on later visits if the browser has kept them. Google bills Map Tiles per request, with a free amount each month. Check the current free amount and prices on Google's pricing page before launch, and set a **budget alert** in the Cloud console so a busy week can't surprise anyone.
-
-**Attribution.** While Google's imagery is on screen, the intro shows "Google Maps" and Google's copyright line in the bottom-right corner, as Google requires.
-- Google prefers its logo to the words. To use it, download Google's attribution assets from https://developers.google.com/maps/documentation/tile/policies#logo-attribution. Save the white, outlined "Google Maps" logo as `assets/logos/google-maps-logo.svg`, then run `node build.js`; the build picks it up.
-- Don't edit the logo.
-
-**Privacy.** With a key set, every visitor's browser contacts Google's servers during the intro. Everything else on the site is served from this site alone.
+**How it plays:**
+- The page downloads only the clip that matches the screen's shape. It starts 1.5 s into the zoom, so it doesn't slow down the first paint.
+- If the clip hasn't loaded 2 s after the satellite zoom ends, or the browser won't autoplay it (iPhones in Low Power Mode), the intro carries on without it.
+- With the clip, the intro takes about 19 s instead of 15.
 
 ### The birds
 

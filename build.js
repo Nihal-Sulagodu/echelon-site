@@ -45,13 +45,19 @@ const art = JSON.parse(fs.readFileSync(file('assets/art/manifest.json'), 'utf8')
 if (fs.existsSync(file('assets/intro/manifest.json'))) {
   content._introLevels = JSON.parse(fs.readFileSync(file('assets/intro/manifest.json'), 'utf8')).levels
     .map((l) => ({ km: l.km, sizes: l.sizes, feather: l.feather || 0 }));
-  content._introSchool = JSON.parse(fs.readFileSync(file('assets/intro/manifest.json'), 'utf8')).school;
 } else {
   console.warn('  ! assets/intro/manifest.json is missing, so the intro has no zoom from space.');
 }
-// The Google Maps logo, if its official file has been added (see README). Without it the
-// intro writes "Google Maps" as text, which Google's attribution rules also allow.
-content._gmapsLogo = fs.existsSync(file('assets/logos/google-maps-logo.svg')) ? 'assets/logos/google-maps-logo.svg' : '';
+// The campus clip from Google Earth Studio, if it has been added (see README). Only used
+// when every file it lists is there.
+if (fs.existsSync(file('assets/intro/campus.json'))) {
+  const clip = JSON.parse(fs.readFileSync(file('assets/intro/campus.json'), 'utf8'));
+  const files = ['landscape', 'portrait'].flatMap((k) => (clip[k]?.files || []).map(([f]) => `assets/intro/${f}`));
+  const missing = files.filter((f) => !fs.existsSync(file(f)));
+  if (!clip.startKm || !clip.landscape || !clip.portrait) fail('assets/intro/campus.json needs "startKm", "landscape" and "portrait".');
+  if (missing.length) fail(`assets/intro/campus.json lists files that aren't there: ${missing.join(', ')}`);
+  content._introClip = { startKm: clip.startKm, landscape: clip.landscape, portrait: clip.portrait };
+}
 
 /* ---------- checks -------------------------------------------------------- */
 
@@ -85,14 +91,6 @@ for (const e of content.events?.items || []) {
     if (typeof e[key] !== 'string') errors.push(`event "${e.id}" is missing "${key}".`);
   }
   if (!Array.isArray(e.rules) || !Array.isArray(e.about)) errors.push(`event "${e.id}" needs "about" and "rules" lists.`);
-}
-const introCfg = content.intro || {};
-if (introCfg.googleMapsKey && !/^[A-Za-z0-9_-]{30,60}$/.test(introCfg.googleMapsKey)) {
-  errors.push('intro.googleMapsKey doesn\'t look like a Google API key (they usually start with "AIza"). Leave it "" to end the zoom on the neighbourhood.');
-}
-const cam = introCfg.campus || {};
-if (introCfg.googleMapsKey && !(Math.abs(cam.lat) <= 90 && Math.abs(cam.lon) <= 180 && cam.widthKm > 0.05 && cam.widthKm < 5)) {
-  errors.push('intro.campus needs "lat", "lon" and a "widthKm" between 0.05 and 5.');
 }
 for (const p of content.partners?.items || []) {
   if (!fs.existsSync(file(p.logo))) errors.push(`partner logo not found: ${p.logo}`);

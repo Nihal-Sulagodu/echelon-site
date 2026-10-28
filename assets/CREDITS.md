@@ -42,7 +42,7 @@ The zoom from space at the start of the intro. Made by `tools/intro-imagery/make
 | `earth-5-*` to `earth-7-*` (Bengaluru and the school's neighbourhood) | Sentinel-2 L2A scenes `S2C_43PGQ_20260206_0_L2A` and `S2C_43PHQ_20260206_0_L2A`, 10 m per pixel, 6 February 2026 | European Space Agency / Copernicus, via Element 84 Earth Search on AWS Open Data: `s3://sentinel-cogs` | Copernicus Sentinel data terms: free to use, copy and change, with credit. Required credit: "Contains modified Copernicus Sentinel data 2026" |
 | (used to tell land from sea; not shipped) | NOAA GLOBE 1 km land mask, via the `global-land-mask` Python package | NOAA NGDC | Public domain (US government work) |
 
-**The campus close-up** (when `intro.googleMapsKey` is set in `content.json`) is Google's satellite imagery, loaded live from Google's Map Tiles API under the Google Maps Platform Terms of Service. None of it is stored in this project. The intro shows "Google Maps" (or the official logo) and Google's copyright line while it's on screen.
+**The campus close-up** (`campus-landscape.*` and `campus-portrait.*`, once added) is rendered in Google Earth Studio from Google Earth imagery. It's used under Earth Studio's terms (education and non-profit use, with attribution). The credit Earth Studio stamps onto every frame ("Google Earth" and the imagery providers) must stay visible: don't crop or cover it.
 
 The site shows the credit line in the footer (`content.json`, `footer.credit`). Keep it there while these images are used.
 

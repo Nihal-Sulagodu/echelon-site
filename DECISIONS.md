@@ -132,33 +132,30 @@ Three other ways were built and measured first. Lighthouse in the build containe
 
 The LCP fix is a real one, not a trick. Each layer starts fading in while it's a third of the screen wide, so its first paint is smaller than the opening globe. That makes the globe, which is preloaded, the page's LCP (2.2–2.4 s on simulated slow 4G).
 
-### The campus: Google's imagery, live
+### The campus: a Google Earth Studio clip
 
-On 28 October 2026 Nihal asked for the zoom to go all the way into the school using Google Maps.
-- Copying Google's imagery into the site (screenshots, saved tiles) is against Google's terms, so that was ruled out.
-- Instead, the last two or three levels are drawn in the visitor's browser from Google's **Map Tiles API**, using a key set in `content.json` (`intro.googleMapsKey`).
+On 28 October 2026 Nihal asked for the zoom to go all the way into the school.
 
-**How it works:**
-- The page asks for a session (`createSession`: satellite, 2x high-DPI, so 512 px tiles and a quarter as many requests). It keeps the session for its two-week life.
-- One viewport request returns Google's copyright line and the deepest zoom available here.
-- Then it fetches just the tiles covering each level and draws them into a canvas, centred on the campus. The canvas is scaled with a CSS transform: compositor-only, like the satellite images.
+**Rejected:**
+- *Copying from Google Maps:* against Google's terms.
+- *Live tiles from Google's Map Tiles API:* built, tested against a stand-in server, then dropped. It needed a Google Cloud account with billing, and every visit loaded 35–50 billed tiles from Google.
+- *A drone photo from the school:* still the sharpest option, but it depends on BIS having one.
 
-**Placement:**
-- Each level's Google zoom is picked so its pixels match the screen, up to 2560 px across.
-- Level widths go up from the final view in steps of 2.6× until they meet the satellite images, so there are usually two or three Google levels.
-- The camera drifts from the school's map point to the campus centre (`intro.campus`) during these levels.
-- The final view fits `intro.campus.widthKm` across the screen's shorter side.
+**Chosen: Google Earth Studio.** It's free, Google stamps its own credit onto the footage, and the footage may be used for education and non-profit work.
 
-**Attribution:** "Google Maps" (or the official logo, if added to `assets/logos/`) and Google's copyright line show at the bottom right, fading in and out with Google's imagery.
+**How it fits on:**
+- Two renders, landscape and portrait, zoom straight down from about 11.5 km across to the campus in 4 s.
+- `tools/intro-imagery/campus-clip.sh` encodes each as AV1 WebM and H.264 MP4, each under 1.1 MB. With the clip, a laptop's page weight measured 2.94 MB, so a 2 MB clip would have broken the 3 MB budget.
+- The script writes `assets/intro/campus.json`, including `startKm`: the ground across the first frame's longer side.
+- The satellite zoom ends on exactly what that first frame shows on the current screen, allowing for the crop of `object-fit: cover`. Then the clip fades in over 0.25 s and plays.
 
-**Failure:** If the session, the viewport request or any tile fails, that level and the ones after it are dropped and the zoom ends on the closest level that worked. Whether Google answered at all is known before the zoom starts (the page waits for that for at most 1.5 s), and it sets how long the zoom runs: 9.2 s down to the campus, 7.6 s to the neighbourhood. Measured with Google refusing the key, the intro ends at 14.9 s, the same as with no key.
+**Loading:**
+- Only the clip that matches the screen's shape loads.
+- It starts 1.5 s into the zoom. Loading it straight after the satellite images, before the globe's first paint, put it in front of the LCP in Lighthouse's slow-4G simulation: mobile performance fell to 60 with LCP 6.9 s. Delayed, it scored 90 (87, 90, 92) with LCP 2.25 s. Desktop scored 99.
 
-**Tested without Google.** A local stand-in server answered the three Google requests and rendered map tiles at the requested zoom and tile numbers from the Sentinel image, with a crosshair at the campus point. The crosshair stayed centred and the hand-over from the satellite images was seamless. A desktop visit used 36 tiles and a phone 46. It has not yet been run against Google's real service.
+**Fallback:** If the clip isn't ready 2 s after the satellite zoom ends, or `play()` is refused (Low Power Mode on iPhones blocks autoplay), the intro carries on without it.
 
-**Costs and trade-offs, accepted by Nihal:**
-- Google bills per tile, beyond a monthly free amount.
-- The site now depends on a third party for the last frames.
-- Visitors' browsers contact Google during the intro.
+**Tested with stand-in clips.** I cut them from the Sentinel image, with a crosshair on the campus point. The cut from the last satellite frame into the clip was seamless on a laptop (1440 × 900) and a phone (390 × 844). The intro lasted 19.1 s, and the browser tests passed: the intro-length check now allows 22 s when a clip is present. The real Earth Studio footage hasn't been tried yet.
 
 ### Rules
 

@@ -106,21 +106,11 @@ const glassFilter = `
 
 /* ---------- intro ------------------------------------------------------------- */
 
-// Where the zoom is centred, and the Google Maps settings for its closest levels.
-function gmapsAttrs(c) {
-  const school = c._introSchool || [0, 0];
-  const i = c.intro || {};
-  const cam = i.campus || {};
-  // Written even without a key, so ?gmaps=KEY can try one out in your own tab.
-  const gm = cam.lat ? { key: i.googleMapsKey || '', lat: cam.lat, lon: cam.lon, km: cam.widthKm, logo: c._gmapsLogo || '' } : null;
-  return ` data-lat="${school[0]}" data-lon="${school[1]}"${gm ? ` data-gmaps="${esc(JSON.stringify(gm))}"` : ''}`;
-}
-
 function intro(c) {
   return `
 <div class="intro" id="intro" data-intro>
   <div class="intro__veil"></div>
-  <div class="intro__map" aria-hidden="true" data-levels="${esc(JSON.stringify(c._introLevels || []))}"${gmapsAttrs(c)}></div>
+  <div class="intro__map" aria-hidden="true" data-levels="${esc(JSON.stringify(c._introLevels || []))}"${c._introClip ? ` data-clip="${esc(JSON.stringify(c._introClip))}"` : ''}></div>
   <div class="intro__stage" aria-hidden="true">
     <p class="intro__place" data-places="${esc(c.ui.introPlaces.join('|'))}"></p>
     <p class="intro__caption">${c.ui.introLines.map((l) => `<span>${esc(l)}</span>`).join('')}</p>
@@ -546,7 +536,7 @@ export function render(c, { art, inlineCss, jsHref, year }) {
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>${inlineCss}</style>
-<script>${headScript(c._introLevels)}</script>${c.intro && c.intro.googleMapsKey ? '\n<link rel="preconnect" href="https://tile.googleapis.com">' : ''}
+<script>${headScript(c._introLevels)}</script>
 <script src="${jsHref}" defer></script>
 </head>
 <body>
