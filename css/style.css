@@ -1138,6 +1138,9 @@ html:not(.fx-off) .dialog[open] .dialog__panel { animation: dialog-in 0.5s var(-
 .has-orb .orb-canvas { visibility: visible; }
 .app { position: relative; z-index: 1; }
 .intro-on .orb-canvas { z-index: 75; }
+/* The orb redraws on resize, scroll and tab switches. Until the intro hands over to it
+   (20-intro.js adds .intro-orb), keep it from showing on top of the satellite zoom. */
+.intro-on:not(.intro-orb) .orb-canvas { visibility: hidden !important; }
 
 .intro { display: none; }
 .intro-on .intro {
