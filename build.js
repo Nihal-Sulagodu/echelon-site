@@ -48,6 +48,15 @@ if (fs.existsSync(file('assets/intro/manifest.json'))) {
 } else {
   console.warn('  ! assets/intro/manifest.json is missing, so the intro has no zoom from space.');
 }
+// The school's aerial photos that end the intro, if they've been prepared (see README).
+if (fs.existsSync(file('assets/intro/campus-photos.json'))) {
+  const ph = JSON.parse(fs.readFileSync(file('assets/intro/campus-photos.json'), 'utf8'));
+  const names = { top: 'campus-top', topTall: 'campus-top-tall', wide: 'campus-wide', tall: 'campus-tall' };
+  const missing = Object.entries(names).flatMap(([k, n]) => (ph[k]?.sizes || [0]).flatMap((sz) => [`${n}-${sz}.avif`, `${n}-${sz}.webp`]))
+    .filter((f) => !fs.existsSync(file(`assets/intro/${f}`)));
+  if (typeof ph.heading !== 'number' || missing.length) fail(`assets/intro/campus-photos.json is incomplete or lists missing files: ${missing.join(', ')}`);
+  content._introPhotos = { heading: ph.heading, top: { sizes: ph.top.sizes }, topTall: { sizes: ph.topTall.sizes }, wide: { sizes: ph.wide.sizes }, tall: { sizes: ph.tall.sizes } };
+}
 // The campus clip from Google Earth Studio, if it has been added (see README). Only used
 // when every file it lists is there.
 if (fs.existsSync(file('assets/intro/campus.json'))) {
