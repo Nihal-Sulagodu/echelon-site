@@ -160,7 +160,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 245 ms"
+        "detail": "skip visible at 303 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -190,7 +190,7 @@
       {
         "label": "page weight at load under 3 MB",
         "pass": true,
-        "detail": "1905 KB in 17 files"
+        "detail": "1260 KB in 15 files"
       },
       {
         "label": "\"How it works\" is pinned for scrubbing",
@@ -225,7 +225,7 @@
       {
         "label": "page weight after scrolling everything",
         "pass": true,
-        "detail": "1939 KB in 21 files"
+        "detail": "1294 KB in 19 files"
       },
       {
         "label": "axe: no violations (375 px)",
@@ -240,7 +240,7 @@
       {
         "label": "intro finishes by itself in about 20 s",
         "pass": true,
-        "detail": "20692 ms after navigation"
+        "detail": "20822 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -255,7 +255,7 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 17 frames"
+        "detail": "largest gap 0.0 px over 16 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
@@ -328,9 +328,14 @@
         "detail": "{\"button\":false,\"fxOff\":false}"
       },
       {
+        "label": "\"Every letter stands for something\" lists a word for each letter of ECHELON",
+        "pass": true,
+        "detail": "Embrace, Cultural, Harmony, Equality, Languages, Openness, Nuances"
+      },
+      {
         "label": "desktop page weight at load under 3 MB",
         "pass": true,
-        "detail": "2375 KB in 21 files"
+        "detail": "2376 KB in 21 files"
       },
       {
         "label": "text over the hero art meets WCAG AA (1440 px)",
@@ -370,7 +375,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "22:19:27:11 · Echelon starts on Saturday, 21 November 2026 at 8:15 am."
+        "detail": "22:13:39:11 · Echelon starts on Saturday, 21 November 2026 at 8:15 am."
       }
     ]
   },

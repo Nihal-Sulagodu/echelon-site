@@ -345,7 +345,7 @@ So it's redrawn as SVG in `src/logo.js`, close enough to read as the same logo, 
 - the heavy 3D edge becomes a thin pink and cyan offset, like a screen's colour fringe;
 - the tree becomes clean circuit traces with glowing green nodes, and the plug a warm amber.
 
-The arched word sits around the hero globe, as the curve suggests, and the tree on its own is the mark in the header and the favicon. The slogan words and the BIS emblem aren't part of the redrawn logo: the BIS emblem is shown in its own right under "Organised by".
+The arched word sits around the hero globe, as the curve suggests, and the tree on its own is the mark in the header and the favicon. Each letter stands for a word on the original (Embrace, Cultural, Harmony, Equality, Languages, Openness, Nuances). The words are set small along the arch, just outside their letters, in the hero, the logo files and the link preview. On phones they'd be too small to read around the globe, so they're hidden there, and the About section lists them as "Every letter stands for something" on every screen (`about.name` in `content.json`; the build checks they still spell the name). The BIS emblem isn't part of the redrawn logo: it's shown in its own right under "Organised by".
 
 ---
 

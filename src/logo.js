@@ -23,7 +23,12 @@ export const INK = { dark: ['#9AA6FF', '#B79BFF'], light: ['#3B4478', '#4B3F8F']
 // The word on an arch around (0, 0): each letter stands on a circle of radius `r`,
 // `h` tall, `step` degrees apart, upright to the circle like the original.
 // Returns SVG markup for use inside an <svg> whose user space has (0, 0) at the centre.
-export function arch({ r, h, step, id = 'echelon', ink = INK.dark, glow = true, offset = true, weight = 2.9 }) {
+// The words the letters stand for, as on the original artwork.
+export const WORDS = ['Embrace', 'Cultural', 'Harmony', 'Equality', 'Languages', 'Openness', 'Nuances'];
+
+// `words`: also set each letter's word just outside it, along the arch, `size` tall
+// `wordGap` above the letters (pass a colour; the page hides them on small screens, where they'd be too small to read).
+export function arch({ r, h, step, id = 'echelon', ink = INK.dark, glow = true, offset = true, weight = 2.9, words = null, size = 7, wordGap = size * 0.9 }) {
   const word = 'ECHELON';
   const s = h / 14;
   const w = 10 * s;
@@ -44,7 +49,13 @@ export function arch({ r, h, step, id = 'echelon', ink = INK.dark, glow = true, 
     + (glow ? `<g filter="url(#${id}-glow)" opacity=".5">${letters()}</g>` : '')
     + (offset ? letters('#FF2A9D', -0.55 * s, 0.85) + letters('#33E1FF', 0.55 * s, 0.85) : '')
     + letters()
-    + '</g>';
+    + '</g>'
+    + (words ? `<g class="arch-words" fill="${words}" font-size="${size}" font-family="Satoshi, Inter, system-ui, sans-serif" font-weight="500" letter-spacing="${(size * 0.22).toFixed(2)}" text-anchor="middle">`
+      + WORDS.map((wd, i) => {
+        const a = (i - (WORDS.length - 1) / 2) * step;
+        return `<text transform="rotate(${a.toFixed(2)}) translate(0 ${(-(r + h + wordGap)).toFixed(2)})">${wd.toUpperCase()}</text>`;
+      }).join('')
+      + '</g>' : '');
 }
 
 // The circuit tree in a plug, in a 64 x 64 box. `trace` is the colour of the
@@ -67,9 +78,9 @@ export function emblem({ id = 'emblem', trace = 'currentColor', weight = 2.2 } =
 
 // The full logo, as in the original artwork: the arched word over the tree.
 // Standalone SVG files (assets/logos/) use this.
-export function fullLogo({ trace = '#FFFFFF', ink = INK.dark, id = 'logo' } = {}) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-135 -135 270 215" role="img" aria-label="Echelon">`
-    + arch({ r: 62, h: 40, step: 28, id: `${id}-a`, ink })
+export function fullLogo({ trace = '#FFFFFF', ink = INK.dark, id = 'logo', words = '#A9B1E8' } = {}) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-150 -150 300 230" role="img" aria-label="Echelon: Embrace, Cultural, Harmony, Equality, Languages, Openness, Nuances">`
+    + arch({ r: 62, h: 40, step: 28, id: `${id}-a`, ink, words, size: 6.5, wordGap: 14 })
     + `<g transform="translate(-46 -50) scale(1.44)">${emblem({ id: `${id}-e`, trace })}</g>`
     + '</svg>';
 }

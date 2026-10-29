@@ -88,6 +88,11 @@
       "height": 1067,
       "alt": ""
     },
+    "name": {
+      "heading": "Every letter stands for something",
+      "_help": "From the official Echelon logo. Keep one word per letter of ECHELON, in order; the build checks this. The same words are drawn around the logo in src/logo.js (WORDS).",
+      "words": ["Embrace", "Cultural", "Harmony", "Equality", "Languages", "Openness", "Nuances"]
+    },
     "cards": [
       { "icon": "spark", "title": "Eight ways to compete", "text": "Code breaking, logic puzzles, web and game design, building with e-waste, drone racing, app pitches and AI with Prolog." },
       { "icon": "team", "title": "Teams from your school", "text": "Team up with classmates and go up against students from other schools." },

@@ -26,7 +26,7 @@ const write = (rel, data) => { fs.mkdirSync(path.dirname(path.join(root, rel)), 
 
 // --- SVG files ---
 write('assets/logos/echelon-logo.svg', fullLogo({ id: 'd' }) + '\n');
-write('assets/logos/echelon-logo-light.svg', fullLogo({ id: 'l', trace: '#1D2140', ink: INK.light }) + '\n');
+write('assets/logos/echelon-logo-light.svg', fullLogo({ id: 'l', trace: '#1D2140', ink: INK.light, words: '#4B4F7A' }) + '\n');
 write('assets/logos/echelon-emblem.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Echelon">${emblem({ id: 'e', trace: '#FFFFFF' })}</svg>\n`);
 // The favicon: the tree on a black tile, a little heavier so it reads at 16 px.
 const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#000"/><g transform="translate(5 4) scale(.84)">${emblem({ id: 'f', trace: '#FFFFFF', weight: 3.2 })}</g></svg>`;

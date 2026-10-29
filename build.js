@@ -79,6 +79,12 @@ if (ev.date) {
     errors.push(`event.date "${ev.date}" should look like 2027-01-16T08:30:00+05:30, or be "" for "to be announced".`);
   }
 }
+{
+  const words = (content.about && content.about.name && content.about.name.words) || [];
+  if (words.map((w) => w[0]).join('').toUpperCase() !== String(ev.name || '').toUpperCase()) {
+    errors.push(`about.name.words should start with the letters of "${ev.name}", one word per letter, in order.`);
+  }
+}
 if (ev.registrationUrl && !hasPlaceholder(ev.registrationUrl) && !/^https:\/\/\S+$/.test(ev.registrationUrl)) {
   errors.push('event.registrationUrl should start with https:// (or stay a [PLACEHOLDER]).');
 }

@@ -379,6 +379,8 @@ try {
     // there's no Effects switch: motion follows the device's "reduce motion" setting only
     const fx = await page.evaluate(() => ({ button: !!document.querySelector('[data-fx-toggle]'), fxOff: document.documentElement.classList.contains('fx-off') }));
     check('no Effects switch, and effects are on', !fx.button && !fx.fxOff, JSON.stringify(fx));
+    const acro = await page.evaluate(() => [...document.querySelectorAll('.acrostic__word')].map((w) => w.textContent));
+    check('"Every letter stands for something" lists a word for each letter of ECHELON', acro.map((w) => w[0]).join('') === 'ECHELON', acro.join(', '));
 
     const weight = await bytesLoaded(page);
     check('desktop page weight at load under 3 MB', weight.total < 3 * 1024 * 1024, `${(weight.total / 1024).toFixed(0)} KB in ${weight.files} files`);
