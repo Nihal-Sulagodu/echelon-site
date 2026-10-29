@@ -8,7 +8,7 @@
     "build": "node build.js",
     "fonts": "node tools/fetch-fonts.mjs",
     "serve": "node tools/serve.mjs . 8080",
-    "art": "node tools/serve.mjs . 8080 --save",
+    "art": "node tools/art/logo.mjs && node build.js",
     "test": "node tools/test.mjs",
     "lighthouse": "node tools/lighthouse.mjs"
   },

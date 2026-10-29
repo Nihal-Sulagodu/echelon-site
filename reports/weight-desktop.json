@@ -1,10 +1,10 @@
 {
-  "total": 1980610,
+  "total": 2432068,
   "files": 21,
   "list": [
     {
-      "name": "js/main.js?v=b04b3449cc",
-      "bytes": 26538
+      "name": "js/main.js?v=f5ec8a7c00",
+      "bytes": 28965
     },
     {
       "name": "assets/intro/earth-0-1920.avif",
@@ -40,7 +40,7 @@
     },
     {
       "name": "assets/favicon.svg",
-      "bytes": 594
+      "bytes": 889
     },
     {
       "name": "js/vendor/ScrollTrigger.min.js?v=3.15.0",
@@ -71,16 +71,16 @@
       "bytes": 201529
     },
     {
+      "name": "assets/intro/campus-top-1920.avif",
+      "bytes": 258879
+    },
+    {
+      "name": "assets/intro/campus-wide-1920.avif",
+      "bytes": 204292
+    },
+    {
       "name": "assets/favicon.svg",
-      "bytes": 594
-    },
-    {
-      "name": "assets/logos/bis-emblem.webp",
-      "bytes": 14254
-    },
-    {
-      "name": "assets/logos/vidyashilp-university.webp",
-      "bytes": 2498
+      "bytes": 889
     }
   ]
 }

@@ -13,7 +13,7 @@
         "detail": ""
       },
       {
-        "label": "all 7 event cards render",
+        "label": "all 8 event cards render",
         "pass": true,
         "detail": ""
       },
@@ -103,11 +103,6 @@
         "detail": "none"
       },
       {
-        "label": "[375] Effects switch shows \"off\"",
-        "pass": true,
-        "detail": "false"
-      },
-      {
         "label": "[375] no sideways scrolling",
         "pass": true,
         "detail": ""
@@ -153,11 +148,6 @@
         "detail": "none"
       },
       {
-        "label": "[1440] Effects switch shows \"off\"",
-        "pass": true,
-        "detail": "false"
-      },
-      {
         "label": "[1440] no sideways scrolling",
         "pass": true,
         "detail": ""
@@ -170,7 +160,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 151 ms"
+        "detail": "skip visible at 245 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -200,7 +190,7 @@
       {
         "label": "page weight at load under 3 MB",
         "pass": true,
-        "detail": "1917 KB in 18 files"
+        "detail": "1905 KB in 17 files"
       },
       {
         "label": "\"How it works\" is pinned for scrubbing",
@@ -235,7 +225,7 @@
       {
         "label": "page weight after scrolling everything",
         "pass": true,
-        "detail": "1934 KB in 21 files"
+        "detail": "1939 KB in 21 files"
       },
       {
         "label": "axe: no violations (375 px)",
@@ -248,9 +238,9 @@
     "name": "4. Desktop with mouse and keyboard (1440 px)",
     "checks": [
       {
-        "label": "intro finishes by itself in about 14 s",
+        "label": "intro finishes by itself in about 20 s",
         "pass": true,
-        "detail": "14700 ms after navigation"
+        "detail": "20692 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -265,7 +255,7 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 23 frames"
+        "detail": "largest gap 0.0 px over 17 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
@@ -295,12 +285,12 @@
       {
         "label": "every link and button shows a focus outline",
         "pass": true,
-        "detail": "30 checked"
+        "detail": "31 checked"
       },
       {
         "label": "Enter on \"View rules\" opens the rules dialog",
         "pass": true,
-        "detail": "Escape Room"
+        "detail": "Escape Room – Code Breakers"
       },
       {
         "label": "focus moves to the dialog title",
@@ -333,24 +323,14 @@
         "detail": ""
       },
       {
-        "label": "Effects switch turns everything off",
+        "label": "no Effects switch, and effects are on",
         "pass": true,
-        "detail": "{\"fxOff\":true,\"pressed\":\"false\",\"stored\":\"off\",\"triggers\":0,\"pinned\":false,\"cursor\":false}"
-      },
-      {
-        "label": "the choice is remembered",
-        "pass": true,
-        "detail": ""
-      },
-      {
-        "label": "…and back on again",
-        "pass": true,
-        "detail": "{\"fxOff\":false,\"triggers\":2,\"pinned\":true}"
+        "detail": "{\"button\":false,\"fxOff\":false}"
       },
       {
         "label": "desktop page weight at load under 3 MB",
         "pass": true,
-        "detail": "1934 KB in 21 files"
+        "detail": "2375 KB in 21 files"
       },
       {
         "label": "text over the hero art meets WCAG AA (1440 px)",
@@ -390,7 +370,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "23:21:02:13 · Echelon starts on Saturday, 21 November 2026 at 8:30 am."
+        "detail": "22:19:27:11 · Echelon starts on Saturday, 21 November 2026 at 8:15 am."
       }
     ]
   },
@@ -403,9 +383,14 @@
         "detail": ""
       },
       {
-        "label": "\"effects\": false → everything off, no Effects switch shown",
+        "label": "\"effects\": false → everything off",
         "pass": true,
-        "detail": "{\"off\":true,\"gsap\":false,\"cursor\":false,\"toggle\":false}"
+        "detail": "{\"off\":true,\"gsap\":false,\"cursor\":false}"
+      },
+      {
+        "label": "an old saved \"effects off\" choice is ignored and cleared",
+        "pass": true,
+        "detail": "{\"off\":false,\"stored\":null}"
       },
       {
         "label": "\"scrollAnimations\": false → no scroll moments, other effects stay",

@@ -203,7 +203,7 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
 - **Tagline spacing.** The tagline's position is worked out from the particle word's real size: the orb's scale is `min(23.5vw, 42vh)`, and the word's lowest dots sit 0.267 of that below the centre. The tagline starts a gap of 14% of the scale below that (at least 28 px).
 - While the intro shows, the page underneath is `inert`, so keyboard users can't tab into hidden links.
 - **Fallbacks:** if the first image can't load, the intro starts at the caption. If WebGL isn't available, or the orb isn't ready 0.9 s after the caption, a text-only version of the word plays.
-- **The birds are switched off, not deleted.** `BIRDS` at the top of `birdRoles()` in `src/js/10-orb.js` brings back the V formations around the hero orb. The intro's birds were part of the dot map, which is gone. The tagline "Like migrating birds, we rise in formation." is unchanged. It lives in `content.json` (`event.tagline`).
+- **The birds were switched off, not deleted,** and on 29 October Nihal asked for them back: the V formations circle the hero globe again (`BIRDS` in `src/js/10-orb.js`). The intro's birds were part of the dot map, which is gone. The tagline "Like migrating birds, we rise in formation." is unchanged. It lives in `content.json` (`event.tagline`).
 - *Rejected:*
   - a video of the zoom, which would be heavier for the same sharpness, can't reframe for portrait and landscape, and the brief caps videos at 2 MB;
   - the first version's 2-second slice-in, which was called short and lame.
@@ -278,7 +278,7 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
 
   All of it stops with effects off.
 
-**Effects switch.** The sparkle button next to Register turns everything above off or back on, and the choice is remembered (`localStorage`). It starts off for visitors with "reduce motion" set, who can still opt in.
+**No Effects switch.** Effects are off for visitors who have "reduce motion" set on their device, and on for everyone else. The site used to have a sparkle button to turn them off by hand; it was taken out before launch at Nihal's request (October 2026). Anyone who had turned effects off with it gets them back: the saved choice is cleared on the next visit, since there's no button left to undo it.
 
 ---
 
@@ -335,6 +335,20 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
 
 ---
 
+## 8b. The Echelon logo
+
+The official artwork (October 2026) is the word ECHELON on an arch, in squared indigo letters with a pink and cyan 3D edge, over a circuit-board tree growing out of a plug. It came as a flat image with the slogan words and the BIS emblem around it, which can't be used at small sizes or on a dark page.
+
+So it's redrawn as SVG in `src/logo.js`, close enough to read as the same logo, with these modern touches:
+- one even line weight and rounded corners on the letters;
+- the indigo lightened for the black page, with a slight shift from blue to violet across the word;
+- the heavy 3D edge becomes a thin pink and cyan offset, like a screen's colour fringe;
+- the tree becomes clean circuit traces with glowing green nodes, and the plug a warm amber.
+
+The arched word sits around the hero globe, as the curve suggests, and the tree on its own is the mark in the header and the favicon. The slogan words and the BIS emblem aren't part of the redrawn logo: the BIS emblem is shown in its own right under "Organised by".
+
+---
+
 ## 9. Partners
 
 - Both logos are shown in their original colours on light plates. Recolouring an institution's logo for a dark theme isn't ours to decide.
@@ -353,9 +367,10 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
 - **Removed:**
   - **The prize amounts**, at Nihal's request.
   - Last year's details the document contradicts: the "glass room" Escape Room, the Excel-based Treasure Hunt, the 25 × 25 × 5 cm drone limit, and the "Sawubona" theme for Shark Tank and Web Designing.
-- **Not in the document, so placeholders:** each event's team size and teams per school (last year's numbers weren't kept, in case they changed), and the contact email. `mahenthren@bischool.in` appears only for Shark Tank slides, so it isn't assumed to be the general contact.
+- **Teams:** three students per team and up to two teams per school, in every event (Nihal, October 2026; the ECHELON 4.0 registration form says the same).
+- **Contact email:** malarvizhi@bischool.in (Nihal, 29 October 2026). `mahenthren@bischool.in` stays only for Shark Tank slides, as in the programme document.
 - **Durations:** each event's time slot replaces last year's durations. The only duration kept is Shark Tank's 3–5 minute pitch.
-- **Still last year's:** the registration link, a Google Form titled "ECHELON 2026". It needs this year's form.
+- **Registration:** the ECHELON 4.0 Google Form, https://forms.gle/8Ep95jpnQw79zmYX7. It asks respondents to sign in to Google, and still uses three older event names ("E-Waste Reimagined", "Drone Race", "Web Designing (HTML and JAVASCRIPT)"); the site uses the programme document's names.
 
 ---
 
@@ -371,7 +386,7 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
   - skip link and focus outlines;
   - the dialog's focus trap and Esc;
   - the FAQ by keyboard;
-  - the Effects switch.
+  - no Effects switch, and an old saved "effects off" choice is cleared.
 - The countdown.
 - All four `settings` switches.
 - axe scans, real-pixel contrast and page weight.

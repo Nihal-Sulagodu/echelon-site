@@ -1,7 +1,11 @@
 // Renders index.html from content.json. Called by build.js.
 //
+// The logo (the arched ECHELON and the circuit-tree emblem) is drawn in logo.js.
+//
 // Everything visible on the page passes through txt() or plain(), which escape
 // HTML and turn "[PLACEHOLDER: hint]" into a highlighted <mark class="ph">.
+
+import { arch, emblem } from './logo.js';
 
 const PH_RE = /\[PLACEHOLDER(?::\s*([^\]]*))?\]/g;
 
@@ -62,17 +66,7 @@ const icon = (name, cls = 'icon') => `<svg class="${cls}" aria-hidden="true" foc
 
 const sprite = `
 <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
-  <defs>
-    <linearGradient id="g-iris" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFB547"/><stop offset=".3" stop-color="#FF6A5C"/>
-      <stop offset=".55" stop-color="#FF4D8D"/><stop offset=".8" stop-color="#A259FF"/><stop offset="1" stop-color="#3D7BFF"/>
-    </linearGradient>
-  </defs>
-  <symbol id="emblem" viewBox="0 0 64 64">
-    <rect x="5" y="12" width="33" height="10" rx="5" fill="url(#g-iris)"/>
-    <rect x="15" y="27" width="33" height="10" rx="5" fill="url(#g-iris)" opacity=".85"/>
-    <rect x="25" y="42" width="33" height="10" rx="5" fill="url(#g-iris)" opacity=".7"/>
-  </symbol>
+  <symbol id="emblem" viewBox="0 0 64 64">${emblem({ id: 'emblem', weight: 3 })}</symbol>
   <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M10.5 12.5 20 3M16.5 6.5 19 9M14 9l2 2"/></symbol>
     <symbol id="i-gamepad" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M7 8h10a5 5 0 0 1 4.8 6.3l-.7 2.6a2.3 2.3 0 0 1-4 .8L15.4 16H8.6l-1.7 1.7a2.3 2.3 0 0 1-4-.8l-.7-2.6A5 5 0 0 1 7 8Z"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M8 10.5v3.5M6.25 12.25h3.5"/><circle cx="15.5" cy="11.2" r="1" fill="currentColor"/><circle cx="17.7" cy="13.4" r="1" fill="currentColor"/></symbol>
@@ -127,9 +121,6 @@ function intro(c) {
 
 function header(c) {
   const links = c.nav.map((n) => `<li><a href="${esc(n.href)}">${txt(n.label)}</a></li>`).join('');
-  const fx = c.settings.effects
-    ? `<button class="icon-btn fx-toggle" type="button" aria-pressed="true" data-fx-toggle hidden title="${esc(c.ui.effects)}">${icon('sparkles')}<span class="sr-only">${esc(c.ui.effects)}</span></button>`
-    : '';
   return `
   <header class="site-header" data-header>
     <div class="site-header__inner">
@@ -144,7 +135,6 @@ function header(c) {
         <ul class="nav__list glass" id="nav-list">${links}<li class="nav__pill" aria-hidden="true"></li></ul>
       </nav>
       <div class="site-header__actions">
-        ${fx}
         <a class="btn btn--white btn--small halo" href="#register">${esc(c.ui.register)}</a>
       </div>
     </div>
@@ -199,6 +189,7 @@ function hero(c) {
         <div class="hero__visual" data-orb-slot>
           <div class="hero__glow" aria-hidden="true"></div>
           <div class="hero__ring" aria-hidden="true"></div>
+          <svg class="hero__logo" viewBox="-200 -200 400 400" aria-hidden="true" focusable="false">${arch({ r: 133, h: 36, step: 21, id: 'hero-arch' })}</svg>
           <div class="hero__poster" aria-hidden="true"></div>
         </div>
       </div>
@@ -510,7 +501,7 @@ function dialog(c) {
 // Runs first thing in <head>: sets the js / fx-off / intro-on classes, and when the
 // intro will play, starts downloading its first two satellite images straight away
 // (the same files 15-journey.js picks), so the zoom isn't left waiting for main.js.
-const headScript = (levels = []) => `(function(d){var h=d.documentElement,c=h.classList,fx=h.getAttribute('data-fx')!=='off',rm=!1,u=null;c.remove('no-js');c.add('js');try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}try{u=localStorage.getItem('echelon-fx')}catch(e){}if(u==='off')fx=!1;else if(u==='on'&&h.getAttribute('data-fx')!=='off')fx=!0;else if(rm)fx=!1;if(!fx)c.add('fx-off');if(fx&&h.getAttribute('data-intro')==='on'){c.add('intro-on');window.__echelonFailsafe=setTimeout(function(){c.remove('intro-on')},20000);var n=Math.max(innerWidth,innerHeight)*Math.min(devicePixelRatio||1,2);if(navigator.deviceMemory&&navigator.deviceMemory<=2)n=0;${JSON.stringify(levels.slice(0, 2).map((l) => l.sizes))}.forEach(function(s,i){var z=s.filter(function(x){return x>=n*0.9})[0]||s[s.length-1],l=d.createElement('link');l.rel='preload';l.as='image';l.type='image/avif';l.href='assets/intro/earth-'+i+'-'+z+'.avif';d.head.appendChild(l)})}})(document);`;
+const headScript = (levels = []) => `(function(d){var h=d.documentElement,c=h.classList,fx=h.getAttribute('data-fx')!=='off',rm=!1;c.remove('no-js');c.add('js');try{rm=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}try{localStorage.removeItem('echelon-fx')}catch(e){}if(rm)fx=!1;if(!fx)c.add('fx-off');if(fx&&h.getAttribute('data-intro')==='on'){c.add('intro-on');window.__echelonFailsafe=setTimeout(function(){c.remove('intro-on')},20000);var n=Math.max(innerWidth,innerHeight)*Math.min(devicePixelRatio||1,2);if(navigator.deviceMemory&&navigator.deviceMemory<=2)n=0;${JSON.stringify(levels.slice(0, 2).map((l) => l.sizes))}.forEach(function(s,i){var z=s.filter(function(x){return x>=n*0.9})[0]||s[s.length-1],l=d.createElement('link');l.rel='preload';l.as='image';l.type='image/avif';l.href='assets/intro/earth-'+i+'-'+z+'.avif';d.head.appendChild(l)})}})(document);`;
 
 export function render(c, { art, inlineCss, jsHref, year }) {
   const s = c.settings;
