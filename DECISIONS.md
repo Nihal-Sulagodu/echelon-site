@@ -157,6 +157,41 @@ On 28 October 2026 Nihal asked for the zoom to go all the way into the school.
 
 **Tested with stand-in clips.** I cut them from the Sentinel image, with a crosshair on the campus point. The cut from the last satellite frame into the clip was seamless on a laptop (1440 × 900) and a phone (390 × 844). The intro lasted 19.1 s, and the browser tests passed: the intro-length check now allows 22 s when a clip is present. The real Earth Studio footage hasn't been tried yet.
 
+### The campus: the school's own aerial photos
+
+On 29 October 2026 Nihal sent four aerial photos of the campus:
+- one straight down;
+- one wide and angled;
+- two angled "hero" shots.
+
+They end the intro.
+
+**Orientation.** The photos aren't north-up. Lining up what's around the school with the 10 m satellite image shows that the top of the photos faces about **120° (east-south-east)**:
+- the water treatment plant's tanks are to the south-east, top right in the photos;
+- the open field and the stream are to the north-east, at the top;
+- dense housing is to the west, at the bottom.
+
+The long building in OpenStreetMap's outline of the school runs at about 30°, which fits.
+
+**The camera turns to match.** From about 900 km across down to the end of the satellite zoom, the view turns by −120°: a slow camera turn on the way down. On portrait screens the straight-down photo is shown turned a quarter clockwise, so the long campus fits the tall screen, and the view only turns −30°. The satellite layers sit in a square the size of the screen's diagonal, so its corners never show while it turns.
+
+**The ending:**
+1. **The dive, 1.5 s:** the satellite view keeps zooming, past its sharpness, to about 1 km. The enlarging image blurs, which reads as speed, while the straight-down photo grows in from the middle.
+2. **The push-in, 1.7 s,** on the campus.
+3. **The hero shot, 2.6 s:** a cross-fade to the angled shot (photo 4, panoramic, on landscape screens; photo 3 on portrait), darkened behind the white caption, which comes in over it.
+
+**Accepted limits:**
+- There's no imagery between 10 m per pixel and the drone photos, so the dive is a blurred jump, not a measured zoom.
+- The photos' centre and scale are matched by eye, not surveyed.
+
+**Weight and speed:**
+- The photos load 1.5 s into the zoom, like the clip did: the straight-down one first, then the matching hero shot.
+- They add about 450 KB on a laptop (page total 2.39 MB) and about 510 KB on a phone.
+- Mobile Lighthouse scored 89 (81, 89, 96) with LCP 2.3 s, still the opening globe. Desktop scored 99.
+- The intro now takes about 20.5 s.
+
+**The clip from Earth Studio** is still supported, but the photos take priority. The clip is north-up, and both would come at the same moment.
+
 ### Rules
 
 - **Real progress.** The bar at the bottom fills as real things finish: the satellite images, the three fonts, the word's particle layout and the page itself. The word only forms once those are in, with a 4.5 s cap so a slow connection never traps anyone.

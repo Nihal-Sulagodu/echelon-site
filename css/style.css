@@ -1169,6 +1169,23 @@ html:not(.fx-off) .dialog[open] .dialog__panel { animation: dialog-in 0.5s var(-
   visibility: hidden;
   background: no-repeat 50% 50% / 100vmax;
 }
+/* The square the satellite layers turn in (15-journey.js sets its size and turn). */
+.intro__spin { position: absolute; left: 50%; top: 50%; width: 100vmax; height: 100vmax; transform: translate(-50%, -50%); will-change: transform; }
+/* The school's aerial photos at the end of the zoom. */
+.intro__photo {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* The hero shot carries the white caption, so it's darkened behind the words. */
+.intro__photo--hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 45% at 50% 50%, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.22) 100%);
+}
 /* The campus clip from Google Earth Studio; Google's credit is part of the picture. */
 .intro__clip {
   position: absolute;

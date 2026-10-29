@@ -136,9 +136,27 @@ node build.js
 
 It downloads about 1 GB from Amazon's open satellite archive and takes around 10 minutes. The settings (which days, which levels, file sizes) are at the top of the script.
 
-### Zooming in to the campus (Google Earth Studio)
+### The campus at the end of the zoom (the school's aerial photos)
 
-Free satellite pictures are 10 m per pixel, too coarse to show the school's buildings, so the satellite zoom stops at the streets around the school. The last few seconds, down to the campus, are a clip rendered in **Google Earth Studio**, Google's free tool for making videos from Google Earth imagery.
+The satellite zoom ends on the neighbourhood. Free satellite pictures can't show the school's buildings, so the intro finishes with the school's own drone photos:
+1. On the way down, the camera turns to face the way the photos face.
+2. It dives into the straight-down shot and pushes in slowly.
+3. It ends on the angled hero shot under "Bangalore International School presents".
+
+The photos are in `assets/intro/campus-*`. To use different ones:
+
+```
+python3 tools/intro-imagery/campus-photos.py TOP.jpg HERO-WIDE.jpg HERO-TALL.jpg 120
+node build.js
+```
+
+- **`TOP`** is a straight-down shot of the campus.
+- **`HERO-WIDE`** is the angled shot for laptops; **`HERO-TALL`** is the one for phones (it can be the same file).
+- **`120`** is the compass direction the top of `TOP` faces (0 = north, 90 = east). For the October 2026 photos it's 120, east-south-east, worked out by lining up the treatment plant, the field and the housing around the school with the satellite image. If a new top-down photo faces another way, change this number, or the camera will turn the wrong way before the dive.
+
+### Optional: a Google Earth Studio clip instead
+
+The code also supports a clip rendered in **Google Earth Studio** (Google's free tool for making videos from Google Earth imagery) for the last few seconds, down to the campus. **The aerial photos above take priority:** the clip only plays if `assets/intro/campus-photos.json` isn't there.
 
 - Earth Studio stamps the required credit ("Google Earth" and the imagery providers) onto every frame. Google requires it to stay visible, so don't crop or cover it.
 - Google allows Earth Studio footage for education and non-profit use, with that credit.
@@ -173,7 +191,7 @@ The last number is how many km the first frame shows across its longer side. The
 **How it plays:**
 - The page downloads only the clip that matches the screen's shape. It starts 1.5 s into the zoom, so it doesn't slow down the first paint.
 - If the clip hasn't loaded 2 s after the satellite zoom ends, or the browser won't autoplay it (iPhones in Low Power Mode), the intro carries on without it.
-- With the clip, the intro takes about 19 s instead of 15.
+- With the clip, the intro takes about 19 s instead of 15. (With the photos it takes about 20 s.)
 
 ### The birds
 

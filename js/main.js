@@ -622,13 +622,13 @@ async function createOrb(canvas, slot) {
 /* 15 · intro journey ----------------------------------------------------------
  * Before the particle intro, the camera falls from space to the school: the
  * whole Earth, India, South India, Bengaluru, the streets around the campus
- * and, when the clips are there, the campus itself. Down to the streets, every
- * frame is a real satellite image (Sentinel-2, see assets/CREDITS.md) made by
+ * and then the campus itself. Down to the streets, every frame is a real
+ * satellite image (Sentinel-2, see assets/CREDITS.md) made by
  * tools/intro-imagery/make.py. Closer than that, free satellite images are too
- * coarse, so the last few seconds are a clip rendered in Google Earth Studio
- * (assets/intro/campus-*.webm/.mp4, see the README), with Google's credit
- * already in the picture. Without the clip, or if it can't play, the zoom
- * ends on the streets.
+ * coarse, so the camera turns to face the way the school's own drone photos
+ * face, dives into the straight-down one and ends on an angled hero shot
+ * (assets/intro/campus-*, made by tools/intro-imagery/campus-photos.py).
+ * Without the photos, the zoom ends on the streets.
  *
  * The eight images are the same map cropped tighter each time, all centred
  * on the school, so they line up exactly. Each frame scales them: a closer
@@ -657,12 +657,24 @@ function createJourney(el) {
   // the GPU on phones), so the page stays responsive. Canvas and WebGL versions
   // were measured too and blocked the main thread for seconds on machines
   // without a GPU; see DECISIONS.md, section 3.
+  // The layers sit in one square that turns with the camera. It's the size of the screen's
+  // diagonal when it turns, so its corners never show.
+  const spin = d.createElement('div');
+  spin.className = 'intro__spin';
+  el.appendChild(spin);
   const layers = levels.map(() => {
     const div = d.createElement('div');
     div.className = 'intro__layer';
-    el.appendChild(div);
+    spin.appendChild(div);
     return div;
   });
+
+  // The school's aerial photos, if they're there. Portrait screens get the straight-down
+  // photo turned upright, so the satellite view turns a quarter less to match it.
+  let photos = null;
+  try { photos = JSON.parse(el.dataset.photos || 'null'); } catch { photos = null; }
+  const portrait = window.innerHeight > window.innerWidth;
+  const turn = photos ? -(photos.heading - (portrait ? 90 : 0)) : 0; // degrees, at the end of the zoom
 
   // Pick one size for every level: the smallest that covers the screen's longer side.
   // Phones with 2 GB of memory or less get the smallest set.
@@ -697,11 +709,11 @@ function createJourney(el) {
   let zoomStarted;
   const zooming = new Promise((r) => { zoomStarted = r; });
   let clip = null;
-  try { clip = JSON.parse(el.dataset.clip || 'null'); } catch { clip = null; }
+  // The photos replace the clip: it's north-up, and the photos come at the same moment.
+  if (!photos) { try { clip = JSON.parse(el.dataset.clip || 'null'); } catch { clip = null; } }
   let video = null;
   let clipReady = false;
   if (clip) {
-    const portrait = window.innerHeight > window.innerWidth;
     clip.shape = clip[portrait ? 'portrait' : 'landscape'];
     video = d.createElement('video');
     video.className = 'intro__clip';
@@ -722,6 +734,28 @@ function createJourney(el) {
       video.load();
     });
   }
+  // The photos load in the background too, 1.5 s into the zoom, the straight-down one first.
+  const shots = [];
+  const shotsReady = [];
+  if (photos) {
+    const later = Promise.all([images, zooming.then(() => new Promise((r) => setTimeout(r, 1500)))]);
+    [[portrait ? 'topTall' : 'top', portrait ? 'campus-top-tall' : 'campus-top'], [portrait ? 'tall' : 'wide', portrait ? 'campus-tall' : 'campus-wide']]
+      .forEach(([key, name], i) => {
+        const div = d.createElement('div');
+        div.className = i ? 'intro__photo intro__photo--hero' : 'intro__photo';
+        el.appendChild(div);
+        shots.push(div);
+        shotsReady[i] = later.then(() => supportsAvif()).then(async (avif) => {
+          if (gone) return false;
+          const url = `assets/intro/${name}-${pick(photos[key].sizes)}.${avif ? 'avif' : 'webp'}`;
+          const img = new Image();
+          img.src = url;
+          await img.decode();
+          div.style.backgroundImage = `url("${url}")`;
+          return true;
+        }).catch(() => false);
+      });
+  }
   const ready = images;
 
   const pin = d.createElement('span');
@@ -732,16 +766,26 @@ function createJourney(el) {
   let raf = 0;
   let endKm = 0; // where the zoom ends
   let clipShown = false;
+  let photosShown = false;
 
   // The screen size, read once and on resize: reading layout every frame forces a reflow each time.
   let span = 0;
   const measure = () => { span = 0; };
   window.addEventListener('resize', measure);
 
-  // Show the view `km` wide across the screen's longer side.
+  // Show the view `km` wide across the turning square (the screen's longer side when it
+  // doesn't turn). The camera turns during the last part of the fall, from Karnataka down.
   function draw(km) {
     if (gone) return;
-    if (!span) span = Math.max(window.innerWidth, window.innerHeight);
+    if (!span) {
+      const w = window.innerWidth, h = window.innerHeight;
+      span = turn ? Math.ceil(Math.hypot(w, h)) : Math.max(w, h);
+      spin.style.width = spin.style.height = `${span}px`;
+    }
+    if (turn) {
+      const t = smooth(Math.log(900), Math.log(endKm || 11), Math.log(Math.max(km, 0.01)));
+      spin.style.transform = `translate(-50%, -50%) rotate(${(turn * t).toFixed(2)}deg)`;
+    }
     let covered = false; // once a closer level fills the screen, the ones behind it can go
     const last = levels.length - 1;
     for (let i = last; i >= 0; i--) {
@@ -775,6 +819,7 @@ function createJourney(el) {
     // The clip's first frame shows `startKm` across its longer side. The zoom ends on exactly
     // what that frame shows on this screen (object-fit: cover crops it), so the cut is seamless.
     let km1 = last.km * 0.85;
+    endKm = km1;
     if (clip) {
       const w = window.innerWidth, h = window.innerHeight;
       const [vw, vh] = clip.shape.size;
@@ -827,11 +872,45 @@ function createJourney(el) {
     return !token.cancelled;
   }
 
+  // The campus from the school's own drone photos: the camera dives on past the satellite
+  // images (they blur as they enlarge, which reads as speed) and lands on the straight-down
+  // photo, pushes in, then cross-fades to the angled hero shot while `onHero` shows the
+  // caption. Resolves false straight away if the photos aren't in.
+  async function playCampus(token, onHero) {
+    if (!photos) return false;
+    const ok = await Promise.race([Promise.all(shotsReady), new Promise((r) => setTimeout(() => r(null), 1500))]);
+    if (!ok || !ok[0] || token.cancelled) return false;
+    const [top, hero] = shots;
+    const from = endKm;
+    const look = (div, scale, opacity) => {
+      div.style.transform = `scale(${scale.toFixed(4)})`;
+      div.style.opacity = opacity.toFixed(3);
+    };
+    // The dive: the satellite view keeps zooming while the photo grows in from the middle.
+    await tween(1500, (v) => {
+      draw(from * Math.exp(Math.log(0.08) * v));
+      look(top, 0.25 + 0.75 * ease.outCubic(v), smooth(0.35, 0.8, v));
+    }, ease.inOutSine, token);
+    if (token.cancelled) return false;
+    photosShown = true;
+    // A slow push-in on the campus.
+    await tween(1700, (v) => look(top, 1 + 0.07 * v, 1), (v) => v, token);
+    if (token.cancelled) return false;
+    if (!ok[1]) { onHero(); return true; } // no hero shot: the caption goes over the campus
+    // The hero shot, with the caption.
+    onHero();
+    await tween(2600, (v) => {
+      look(top, 1.07 + 0.03 * v, 1);
+      look(hero, 1.08 - 0.08 * ease.outCubic(v), smooth(0, 0.3, v));
+    }, (v) => v, token);
+    return !token.cancelled;
+  }
+
   // The streets (or the campus) fade into the dark while the caption shows.
   function fadeOut(token, duration = 1100) {
     const from = endKm || levels[levels.length - 1].km * 0.85;
     return tween(duration, (v) => {
-      if (!clipShown) draw(from * (1 - 0.18 * v));
+      if (!clipShown && !photosShown) draw(from * (1 - 0.18 * v));
       el.style.opacity = (1 - v).toFixed(3);
     }, ease.inOutCubic, token).then(dispose);
   }
@@ -842,11 +921,12 @@ function createJourney(el) {
     gone = true;
     cancelAnimationFrame(raf);
     window.removeEventListener('resize', measure);
-    layers.forEach((l) => l.remove());
+    spin.remove();
+    shots.forEach((s) => s.remove());
     if (video) { video.pause(); video.removeAttribute('src'); video.textContent = ''; video.load(); video.remove(); }
   }
 
-  return { play, playClip, fadeOut, ready, dispose };
+  return { play, playClip, playCampus, fadeOut, ready, dispose };
 }
 
 // ---- src/js/20-intro.js
@@ -854,9 +934,10 @@ function createJourney(el) {
  * About fourteen seconds, on every page load, never with reduced motion:
  *   0 s     the Earth from space; the camera falls through real satellite
  *           images: India, South India, Bengaluru, then the streets around
- *           the school (15-journey.js), and, when its clip is there, a
- *           few seconds of Google Earth Studio footage down to the campus
- *           (everything after this moves later by the clip's length)
+ *           the school (15-journey.js), turning to face the way the
+ *           school's drone photos face; then a dive into the straight-down
+ *           photo of the campus and a cross-fade to the angled hero shot,
+ *           under the caption (everything after this moves about 5 s later)
  *   7.6 s   the streets fade into the dark under
  *           "Bangalore International School presents"
  *   9 s     a spark bursts into a spiral galaxy of particles
@@ -944,9 +1025,15 @@ async function runIntro(orbReady) {
   if (token.cancelled) return;
   if (flew) {
     place.classList.remove('is-show');
-    await journey.playClip(token); // the campus, if its clip is there and can play
+    // The campus: the school's aerial photos (the caption comes in over the last one), or the
+    // Earth Studio clip if that's there instead.
+    const campus = await journey.playCampus(token, () => show(caption));
     if (token.cancelled) return;
-    show(caption);
+    if (!campus) {
+      await journey.playClip(token);
+      if (token.cancelled) return;
+      show(caption);
+    }
     await journey.fadeOut(token);
     if (token.cancelled) return;
     await wait(300, token);

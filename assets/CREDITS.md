@@ -46,6 +46,16 @@ The zoom from space at the start of the intro. Made by `tools/intro-imagery/make
 
 The site shows the credit line in the footer (`content.json`, `footer.credit`). Keep it there while these images are used.
 
+## Aerial photos of the campus (in `assets/intro/campus-*`)
+
+| Files | What | Source |
+|---|---|---|
+| `campus-top-*`, `campus-top-tall-*` | Straight-down drone photo of the campus | Supplied by Nihal on 29 October 2026 as the school's own aerial photos |
+| `campus-wide-*` | Angled panoramic shot of the campus | Same |
+| `campus-tall-*` | Angled shot of the campus | Same |
+
+Used on the understanding that Bangalore International School owns these photos, or has the photographer's permission to use them. **Confirm this, and the photographer's name if they want credit, before launch.** Re-saved at two sizes as AVIF and WebP by `tools/intro-imagery/campus-photos.py`, and the straight-down shot also turned upright for phones. Otherwise unchanged.
+
 ## Logos (in `assets/logos/`)
 
 Used with permission: on 23 October 2026 Nihal (who runs this project) confirmed there is permission to use both logos on the site. Neither logo has been redrawn or recoloured.

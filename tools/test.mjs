@@ -284,11 +284,13 @@ try {
     watchErrors(page, 'desktop');
     await page.addInitScript(INIT);
     await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-    // About 14 s, plus the campus clip's 4 s when assets/intro/campus.json is there.
-    const clip = fs.existsSync(path.join(root, 'assets', 'intro', 'campus.json'));
-    await page.waitForSelector('#intro', { state: 'detached', timeout: clip ? 26000 : 22000 });
+    // About 14 s, plus about 6 s for the campus photos (assets/intro/campus-photos.json) or
+    // 4 s for the Earth Studio clip (assets/intro/campus.json).
+    const has = (f) => fs.existsSync(path.join(root, 'assets', 'intro', f));
+    const extra = has('campus-photos.json') ? 6 : has('campus.json') ? 4 : 0;
+    await page.waitForSelector('#intro', { state: 'detached', timeout: (22 + extra) * 1000 });
     const probe = await page.evaluate(() => window.__probe);
-    check(`intro finishes by itself in about ${clip ? 19 : 14} s`, probe.introGoneAt !== null && probe.introGoneAt <= (clip ? 22000 : 17000), `${Math.round(probe.introGoneAt)} ms after navigation`);
+    check(`intro finishes by itself in about ${14 + extra} s`, probe.introGoneAt !== null && probe.introGoneAt <= (17 + extra) * 1000, `${Math.round(probe.introGoneAt)} ms after navigation`);
     check('intro progress reached 100%', probe.maxProgress === 100, `${probe.maxProgress}%`);
     await page.waitForLoadState('load');
     await page.waitForTimeout(500);
