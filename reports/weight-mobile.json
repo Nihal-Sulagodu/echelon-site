@@ -1,6 +1,6 @@
 {
-  "total": 1950704,
-  "files": 17,
+  "total": 1289911,
+  "files": 15,
   "list": [
     {
       "name": "js/main.js?v=f5ec8a7c00",
@@ -57,14 +57,6 @@
     {
       "name": "assets/intro/earth-5-1920.avif",
       "bytes": 393131
-    },
-    {
-      "name": "assets/intro/earth-6-1920.avif",
-      "bytes": 459807
-    },
-    {
-      "name": "assets/intro/earth-7-1350.avif",
-      "bytes": 201529
     }
   ]
 }

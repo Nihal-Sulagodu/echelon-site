@@ -605,7 +605,9 @@ html:not(.fx-off) .hero__presenter { animation: shimmer 6s linear infinite; }
 .has-orb .hero__poster { opacity: 0; transition: opacity 0.6s; }
 /* The official arched ECHELON, around the top of the globe (the globe's radius is 30% of the
    slot, the ring's 47%; the letters stand between them). It fades in as the intro hands over. */
-.hero__logo { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; transition: opacity 1.4s var(--ease) 0.5s, transform 1.6s var(--ease-out) 0.5s; }
+.hero__logo { color: rgba(201, 206, 255, 0.72); position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; transition: opacity 1.4s var(--ease) 0.5s, transform 1.6s var(--ease-out) 0.5s; }
+/* The words around the arch are too small to read on narrow screens; the About section lists them. */
+@media (max-width: 40rem) { .hero__logo .arch-words { display: none; } }
 .hero-enter .hero__logo { opacity: 0; transform: scale(0.94); transition: none; }
 .hero-entering .hero__logo { opacity: 1; transform: none; transition: opacity 1.4s var(--ease) 0.5s, transform 1.6s var(--ease-out) 0.5s; }
 
@@ -699,6 +701,12 @@ html:not(.fx-off) .marquee { animation: marquee 70s linear infinite; }
 
 /* 7. About ----------------------------------------------------------------------------- */
 
+.acrostic { margin-top: clamp(3rem, 7vw, 5rem); text-align: center; }
+.acrostic__title { margin: 0 0 1.5rem; color: var(--text-2); font: 500 var(--step-1) / 1.3 var(--font-body); }
+.acrostic__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.acrostic__list li { display: grid; gap: 0.35rem; justify-items: center; padding: 1.1rem 0.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255, 255, 255, 0.02); }
+.acrostic__letter { font: 600 2.6rem / 1 var(--font-display); color: #9AA6FF; text-shadow: -1.5px 0 rgba(255, 42, 157, 0.75), 1.5px 0 rgba(51, 225, 255, 0.75); }
+.acrostic__word { font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
 .statement {
   max-width: 16ch;
   margin: 0 auto clamp(3rem, 7vw, 5.5rem);

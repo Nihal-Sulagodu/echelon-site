@@ -219,6 +219,8 @@ CHROME_PATH=/path/to/chromium npm run art
 
 It writes the link-preview image (`assets/art/og-image.jpg`), the icons (`assets/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) and the standalone logo files in `assets/logos/`, then rebuilds the page. It needs Chromium and the Inter font installed.
 
+The words each letter stands for (Embrace, Cultural, Harmony...) are in two places: `WORDS` in `src/logo.js` (drawn around the logo) and `about.name.words` in `content.json` (the list in the About section). Change both together.
+
 The standalone logo files, for posters, certificates and slides:
 
 | File | Use it on |

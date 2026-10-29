@@ -189,7 +189,7 @@ function hero(c) {
         <div class="hero__visual" data-orb-slot>
           <div class="hero__glow" aria-hidden="true"></div>
           <div class="hero__ring" aria-hidden="true"></div>
-          <svg class="hero__logo" viewBox="-200 -200 400 400" aria-hidden="true" focusable="false">${arch({ r: 133, h: 36, step: 21, id: 'hero-arch' })}</svg>
+          <svg class="hero__logo" viewBox="-200 -200 400 400" aria-hidden="true" focusable="false">${arch({ r: 133, h: 36, step: 21, id: 'hero-arch', words: 'currentColor', size: 7.5 })}</svg>
           <div class="hero__poster" aria-hidden="true"></div>
         </div>
       </div>
@@ -239,6 +239,10 @@ function about(c) {
             </div>
           </div>
           <ul class="features">${cards}</ul>
+        </div>
+        <div class="acrostic">
+          <h3 class="acrostic__title">${txt(a.name.heading)}</h3>
+          <ul class="acrostic__list" aria-label="${plain(c.event.name)}">${a.name.words.map((w) => `<li><span class="acrostic__letter" aria-hidden="true">${esc(w[0])}</span><span class="acrostic__word">${esc(w)}</span></li>`).join('')}</ul>
         </div>
       </div>
     </section>`;
