@@ -356,7 +356,7 @@ function earthColours(sphere, N, rnd) {
 // 14 of them circle the globe in two V formations of 7; the rest are flocks of
 // 9 that fly off when the globe breaks apart.
 // Set BIRDS to true to bring them back (switched off in October 2026, see DECISIONS.md).
-const BIRDS = false;
+const BIRDS = true;
 function birdRoles(N) {
   const out = new Float32Array(N * 4);
   if (!BIRDS) return out;
@@ -414,10 +414,14 @@ async function createOrb(canvas, slot) {
   // Fibonacci sphere: an even lattice of points, like the dots on a golf ball.
   const sphere = new Float32Array(N * 3);
   const golden = Math.PI * (3 - Math.sqrt(5));
+  // Points are stored in a scrambled order (k steps through the spiral by a prime), so
+  // the adaptive quality cut, which draws only the first part of the buffer, thins the
+  // whole globe evenly instead of dropping its bottom half.
   for (let i = 0; i < N; i++) {
-    const y = 1 - (i / (N - 1)) * 2;
+    const k = (i * 7919) % N;
+    const y = 1 - (k / (N - 1)) * 2;
     const r = Math.sqrt(1 - y * y);
-    const th = golden * i;
+    const th = golden * k;
     sphere.set([Math.cos(th) * r, y, Math.sin(th) * r], i * 3);
   }
   // Spiral galaxy with three arms.

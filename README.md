@@ -6,7 +6,7 @@ A one-page website for **Echelon**, the interschool tech fest run by Bangalore I
 
 - The look is black and minimal, with a glowing particle orb, glass panels and a liquid-glass cursor.
 - The intro falls from space to the school through real satellite images (Sentinel-2), then the particles form the word "Echelon".
-- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Teams are three students, with up to two teams per school in every event, and registration uses the ECHELON 4.0 Google Form. Still a placeholder: the contact email.
+- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Teams are three students, with up to two teams per school in every event, and registration uses the ECHELON 4.0 Google Form. Questions go to malarvizhi@bischool.in.
 - Mobile Lighthouse (28 October 2026, in a container with no GPU, which is harsher than a normal machine): 93 performance, 100 accessibility, 96 best practices, 100 SEO, median of 3 runs. Desktop scores 100 for performance. The 96 in best practices only happened because the fonts couldn't be downloaded in that container.
 - Browser tests: 78 of 79 checks pass. The one failure is the same two missing font files.
 - Details are in [`reports/`](reports/README.md).
@@ -48,12 +48,7 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 ### What still needs a real value
 
-| Where in `content.json` | What it needs |
-|---|---|
-| `contact.email` | The email address for questions |
-| `faq.items[7].a` | The answer to "Who do we contact with questions?", which needs the same email |
-
-`node build.js` always prints the current list. When it says "No placeholders left", everything is filled.
+Nothing at the moment. Anything written as `[PLACEHOLDER: ...]` in `content.json` shows on the page as a marked placeholder, and `node build.js` always prints the current list. When it says "No placeholders left", everything is filled.
 
 ### Filled in from other sources, so check before launch
 
@@ -192,7 +187,7 @@ The last number is how many km the first frame shows across its longer side. The
 
 ### The birds
 
-**The birds are switched off for now.** To bring back the V formations of birds around the hero orb, set `BIRDS` to `true` near the top of `birdRoles()` in `src/js/10-orb.js`, then run `node build.js`.
+Two V formations of birds circle the hero globe, and when the globe breaks apart on scroll, some of its points fly off as flocks. To switch them off, set `BIRDS` to `false` near the top of `birdRoles()` in `src/js/10-orb.js`, then run `node build.js`.
 
 ---
 

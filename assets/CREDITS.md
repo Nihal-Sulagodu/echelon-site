@@ -54,7 +54,7 @@ The site shows the credit line in the footer (`content.json`, `footer.credit`). 
 | `campus-wide-*` | Angled panoramic shot of the campus | Same |
 | `campus-tall-*` | Angled shot of the campus | Same |
 
-Used on the understanding that Bangalore International School owns these photos, or has the photographer's permission to use them. **Confirm this, and the photographer's name if they want credit, before launch.** Re-saved at two sizes as AVIF and WebP by `tools/intro-imagery/campus-photos.py`, and the straight-down shot also turned upright for phones. Otherwise unchanged.
+Bangalore International School owns the rights to these photos: Nihal asked the school and confirmed this on 29 October 2026. Re-saved at two sizes as AVIF and WebP by `tools/intro-imagery/campus-photos.py`, and the straight-down shot also turned upright for phones. Otherwise unchanged.
 
 ## Logos (in `assets/logos/`)
 

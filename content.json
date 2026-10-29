@@ -1,6 +1,6 @@
 {
   "_howto": "All text and images on the site come from this file. Edit it, then run `node build.js` to rebuild index.html. Anything written as [PLACEHOLDER: ...] has not been confirmed yet; `node build.js` lists every placeholder that is left.",
-  "_source": "Event details, times, rooms and the day's programme are from the Echelon 4.0 programme document (\"Echelon 4.0 – High School Competitions\", October 2026). Team size (3) and teams per school (up to 2) and the registration form are from Nihal on 29 October 2026, and match the Echelon 4.0 registration form. Prize amounts are left out on purpose.",
+  "_source": "Event details, times, rooms and the day's programme are from the Echelon 4.0 programme document (\"Echelon 4.0 – High School Competitions\", October 2026). Team size (3) and teams per school (up to 2) and the registration form are from Nihal on 29 October 2026, and match the Echelon 4.0 registration form. The contact email (malarvizhi@bischool.in) is from Nihal on 29 October 2026. Prize amounts are left out on purpose.",
 
   "settings": {
     "_note": "Turn effects off for every visitor by setting a value to false, then rebuild. Visitors can also switch effects off themselves with the Effects button.",
@@ -359,7 +359,7 @@
       { "column": 1, "q": "When and where is it?", "a": "On Saturday, 21 November 2026, at Bangalore International School. Report by 8:15 am. The day ends with prize distribution, from 1:30 to 2:30 pm." },
       { "column": 1, "q": "Is food provided?", "a": "Yes. Breakfast (8:15 to 9:00 am) and lunch (12:45 to 1:20 pm) are provided." },
       { "column": 1, "q": "What should we bring?", "a": "Web Designing: all your images, audio and video saved on your device, as there's no internet. Game Designing: your own device, or use the lab's Windows PCs. E-Waste to Innovation: your own materials, mainly e-waste. Drone Racing: your drone (at most 30 × 30 cm) with fully charged batteries, plus spares; the school doesn't provide any. Shark Tank: your slides on a device or pen drive, or shared in advance." },
-      { "column": 1, "q": "Who do we contact with questions?", "a": "Email the organising team at [PLACEHOLDER: contact email]." }
+      { "column": 1, "q": "Who do we contact with questions?", "a": "Email the organising team at malarvizhi@bischool.in." }
     ]
   },
 
@@ -376,7 +376,7 @@
     "heading": "Contact",
     "text": "For updates and questions, contact",
     "name": "the Echelon team",
-    "email": "[PLACEHOLDER: contact email]"
+    "email": "malarvizhi@bischool.in"
   },
 
   "footer": {

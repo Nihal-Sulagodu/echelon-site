@@ -1,6 +1,6 @@
 # Browser test report
 
-Run: 2026-10-29T07:12:07.595Z · Chrome (installed) via playwright-core · `npm test`
+Run: 2026-10-29T07:17:56.151Z · Chrome (installed) via playwright-core · `npm test`
 
 **75 of 76 checks passed.**
 
@@ -47,7 +47,7 @@ Run: 2026-10-29T07:12:07.595Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro shows with a Skip button from the first frame | skip visible at 187 ms |
+| ✅ | intro shows with a Skip button from the first frame | skip visible at 245 ms |
 | ✅ | Skip removes the intro |  |
 | ✅ | the intro plays again on every refresh |  |
 | ✅ | Skip works again after a refresh |  |
@@ -67,16 +67,16 @@ Run: 2026-10-29T07:12:07.595Z · Chrome (installed) via playwright-core · `npm 
 
 | | Check | Detail |
 |---|---|---|
-| ✅ | intro finishes by itself in about 20 s | 20623 ms after navigation |
+| ✅ | intro finishes by itself in about 20 s | 20692 ms after navigation |
 | ✅ | intro progress reached 100% | 100% |
 | ✅ | glass cursor appears with a mouse |  |
-| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 19 frames |
+| ✅ | the lens stays on the pointer while moving fast | largest gap 0.0 px over 17 frames |
 | ✅ | the lens flows into the shape of a button | lens 199px wide over a 187px button |
 | ✅ | native cursor comes back when the pointer leaves |  |
 | ✅ | first Tab lands on "Skip to content" | Skip to content |
 | ✅ | focus is visible | solid |
 | ✅ | skip link moves focus to the main content |  |
-| ✅ | every link and button shows a focus outline | 30 checked |
+| ✅ | every link and button shows a focus outline | 31 checked |
 | ✅ | Enter on "View rules" opens the rules dialog | Escape Room – Code Breakers |
 | ✅ | focus moves to the dialog title |  |
 | ✅ | Tab stays inside the open dialog |  |
@@ -97,7 +97,7 @@ Run: 2026-10-29T07:12:07.595Z · Chrome (installed) via playwright-core · `npm 
 | ✅ | counts down to a set date | 03:04:59:59 |
 | ✅ | ticks every second | 03:04:59:59 -> 03:04:59:58 |
 | ✅ | shows the "happening now" message once the date has passed |  |
-| ✅ | counts down to the date in content.json | 22:19:32:59 · Echelon starts on Saturday, 21 November 2026 at 8:15 am. |
+| ✅ | counts down to the date in content.json | 22:19:27:11 · Echelon starts on Saturday, 21 November 2026 at 8:15 am. |
 
 ## 6. Settings switches (content.json "settings")
 

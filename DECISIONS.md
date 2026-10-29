@@ -203,7 +203,7 @@ The long building in OpenStreetMap's outline of the school runs at about 30°, w
 - **Tagline spacing.** The tagline's position is worked out from the particle word's real size: the orb's scale is `min(23.5vw, 42vh)`, and the word's lowest dots sit 0.267 of that below the centre. The tagline starts a gap of 14% of the scale below that (at least 28 px).
 - While the intro shows, the page underneath is `inert`, so keyboard users can't tab into hidden links.
 - **Fallbacks:** if the first image can't load, the intro starts at the caption. If WebGL isn't available, or the orb isn't ready 0.9 s after the caption, a text-only version of the word plays.
-- **The birds are switched off, not deleted.** `BIRDS` at the top of `birdRoles()` in `src/js/10-orb.js` brings back the V formations around the hero orb. The intro's birds were part of the dot map, which is gone. The tagline "Like migrating birds, we rise in formation." is unchanged. It lives in `content.json` (`event.tagline`).
+- **The birds were switched off, not deleted,** and on 29 October Nihal asked for them back: the V formations circle the hero globe again (`BIRDS` in `src/js/10-orb.js`). The intro's birds were part of the dot map, which is gone. The tagline "Like migrating birds, we rise in formation." is unchanged. It lives in `content.json` (`event.tagline`).
 - *Rejected:*
   - a video of the zoom, which would be heavier for the same sharpness, can't reframe for portrait and landscape, and the brief caps videos at 2 MB;
   - the first version's 2-second slice-in, which was called short and lame.
@@ -368,7 +368,7 @@ The arched word sits around the hero globe, as the curve suggests, and the tree 
   - **The prize amounts**, at Nihal's request.
   - Last year's details the document contradicts: the "glass room" Escape Room, the Excel-based Treasure Hunt, the 25 × 25 × 5 cm drone limit, and the "Sawubona" theme for Shark Tank and Web Designing.
 - **Teams:** three students per team and up to two teams per school, in every event (Nihal, October 2026; the ECHELON 4.0 registration form says the same).
-- **Not in the document, so a placeholder:** the contact email. `mahenthren@bischool.in` appears only for Shark Tank slides, so it isn't assumed to be the general contact.
+- **Contact email:** malarvizhi@bischool.in (Nihal, 29 October 2026). `mahenthren@bischool.in` stays only for Shark Tank slides, as in the programme document.
 - **Durations:** each event's time slot replaces last year's durations. The only duration kept is Shark Tank's 3–5 minute pitch.
 - **Registration:** the ECHELON 4.0 Google Form, https://forms.gle/8Ep95jpnQw79zmYX7. It asks respondents to sign in to Google, and still uses three older event names ("E-Waste Reimagined", "Drone Race", "Web Designing (HTML and JAVASCRIPT)"); the site uses the programme document's names.
 

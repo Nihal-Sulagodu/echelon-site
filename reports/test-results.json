@@ -160,7 +160,7 @@
       {
         "label": "intro shows with a Skip button from the first frame",
         "pass": true,
-        "detail": "skip visible at 187 ms"
+        "detail": "skip visible at 245 ms"
       },
       {
         "label": "Skip removes the intro",
@@ -240,7 +240,7 @@
       {
         "label": "intro finishes by itself in about 20 s",
         "pass": true,
-        "detail": "20623 ms after navigation"
+        "detail": "20692 ms after navigation"
       },
       {
         "label": "intro progress reached 100%",
@@ -255,7 +255,7 @@
       {
         "label": "the lens stays on the pointer while moving fast",
         "pass": true,
-        "detail": "largest gap 0.0 px over 19 frames"
+        "detail": "largest gap 0.0 px over 17 frames"
       },
       {
         "label": "the lens flows into the shape of a button",
@@ -285,7 +285,7 @@
       {
         "label": "every link and button shows a focus outline",
         "pass": true,
-        "detail": "30 checked"
+        "detail": "31 checked"
       },
       {
         "label": "Enter on \"View rules\" opens the rules dialog",
@@ -370,7 +370,7 @@
       {
         "label": "counts down to the date in content.json",
         "pass": true,
-        "detail": "22:19:32:59 · Echelon starts on Saturday, 21 November 2026 at 8:15 am."
+        "detail": "22:19:27:11 · Echelon starts on Saturday, 21 November 2026 at 8:15 am."
       }
     ]
   },
