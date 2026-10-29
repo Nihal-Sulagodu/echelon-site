@@ -1,13 +1,11 @@
-/* 90 · the Effects switch -----------------------------------------------------------------
- * One button turns every effect off or back on, and the choice is remembered.
- * It starts "off" for visitors who have "reduce motion" set on their device.
+/* 90 · effects and "reduce motion" ---------------------------------------------------------
+ * Effects are off for visitors who have "reduce motion" set on their device
+ * (decided in <head> before anything draws), and this follows that setting if
+ * it changes while the page is open. There is no on/off button on the page.
  */
 
-function setEffects(on, remember) {
+function setEffects(on) {
   html.classList.toggle('fx-off', !on);
-  if (remember) local.set('echelon-fx', on ? 'on' : 'off');
-  const btn = $('[data-fx-toggle]');
-  if (btn) btn.setAttribute('aria-pressed', String(on));
   if (on) {
     initLens();
     initScroll();
@@ -22,15 +20,7 @@ function setEffects(on, remember) {
   }
 }
 
-function initEffectsToggle() {
-  const btn = $('[data-fx-toggle]');
-  if (!btn || !SITE.effects) return;
-  btn.hidden = false;
-  btn.setAttribute('aria-pressed', String(fxOn()));
-  btn.addEventListener('click', () => setEffects(!fxOn(), true));
-  // Follow the device's "reduce motion" setting if it changes, unless the
-  // visitor already chose for themselves.
-  media('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
-    if (!local.get('echelon-fx')) setEffects(!e.matches, false);
-  });
+function initMotionPreference() {
+  if (!SITE.effects) return;
+  media('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => setEffects(!e.matches));
 }

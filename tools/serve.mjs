@@ -1,17 +1,14 @@
 // Tiny static file server for local preview and testing. No dependencies.
 //
-//   node tools/serve.mjs [root] [port] [--save]
+//   node tools/serve.mjs [root] [port]
 //
-// Binds to 127.0.0.1 only. With --save it also accepts POST /__save?path=assets/...
-// so the art generator (tools/art/) can write the images it renders. Writes are
-// restricted to the assets/ folder of the root.
+// Binds to 127.0.0.1 only.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 
 const args = process.argv.slice(2);
-const allowSave = args.includes('--save');
 const positional = args.filter((a) => !a.startsWith('--'));
 const root = path.resolve(positional[0] || '.');
 const port = Number(positional[1]) || 8080;
@@ -42,24 +39,6 @@ function inside(base, target) {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://localhost');
-
-  if (req.method === 'POST' && url.pathname === '/__save') {
-    const rel = url.searchParams.get('path') || '';
-    const target = path.resolve(root, rel);
-    if (!allowSave || !inside(path.join(root, 'assets'), target)) {
-      res.writeHead(403).end('save not allowed');
-      return;
-    }
-    const chunks = [];
-    req.on('data', (c) => chunks.push(c));
-    req.on('end', () => {
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.writeFileSync(target, Buffer.concat(chunks));
-      console.log(`saved ${rel} (${Buffer.concat(chunks).length} bytes)`);
-      res.writeHead(200).end('ok');
-    });
-    return;
-  }
 
   let file = path.resolve(root, '.' + decodeURIComponent(url.pathname));
   if (file !== root && !inside(root, file)) {
@@ -92,5 +71,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`serving ${root} at http://127.0.0.1:${port}${allowSave ? ' (save enabled)' : ''}`);
+  console.log(`serving ${root} at http://127.0.0.1:${port}`);
 });

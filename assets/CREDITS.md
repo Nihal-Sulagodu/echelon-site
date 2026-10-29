@@ -71,8 +71,12 @@ If either institution sends official high-resolution or SVG logo files, replace 
 
 All original, made in code for this project. No stock images, no AI image generators, and nothing taken from any show, game, brand or other website.
 
-- `og-image.jpg`: the preview image for links shared on WhatsApp, Instagram and similar apps (a dotted orb in a ring, the wordmark and the tagline). Drawn by `tools/art/art.js`.
-- `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`: the echelon emblem, three bars in formation with the site's colour gradient. Drawn by `tools/art/art.js`.
+- `og-image.jpg`: the preview image for links shared on WhatsApp, Instagram and similar apps (the Echelon logo, the name, grades and date). Made by `tools/art/logo.mjs`.
+- `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`: the tree from the Echelon logo on black. Made by `tools/art/logo.mjs`.
+
+## The Echelon logo (`src/logo.js`, `assets/logos/echelon-*.svg`)
+
+Redrawn in code from the official Echelon 4.0 artwork, supplied by Nihal in October 2026 as the official logo. Same design (arched ECHELON over a circuit tree in a plug), modernised; see `DECISIONS.md`, section 8b.
 - Not files at all: the particle orb and the particle part of the intro (WebGL), the gravity well (canvas), the dot field (canvas), the glass event art (CSS gradients) and every icon (inline SVG). All are drawn by the page's own code.
 
 ## Reference material (not used in the site)

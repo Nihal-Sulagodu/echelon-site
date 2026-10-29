@@ -190,7 +190,6 @@ try {
       pinned: document.querySelector('#how').classList.contains('is-pinned'),
       marquee: getComputedStyle(document.querySelector('.marquee')).animationName,
       shimmer: getComputedStyle(document.querySelector('.hero__presenter')).animationName,
-      toggle: document.querySelector('[data-fx-toggle]')?.getAttribute('aria-pressed'),
     }));
     check(`[${vp.width}] effects start switched off`, s.fxOff);
     check(`[${vp.width}] no intro`, !s.intro);
@@ -199,7 +198,6 @@ try {
     check(`[${vp.width}] "How it works" is not pinned or scrubbed`, !s.pinned);
     check(`[${vp.width}] event marquee stands still`, s.marquee === 'none', s.marquee);
     check(`[${vp.width}] no shimmer on the gold line`, s.shimmer === 'none', s.shimmer);
-    check(`[${vp.width}] Effects switch shows "off"`, s.toggle === 'false', s.toggle);
     check(`[${vp.width}] no sideways scrolling`, (await overflow(page)) <= 0);
     if (vp.width === 375) {
       const axe = await runAxe(page, 'reduced-motion-375');
@@ -378,22 +376,9 @@ try {
     await page.keyboard.press('Enter');
     check('FAQ opens with the keyboard', await page.evaluate(() => document.querySelector('.qa').open));
 
-    // effects switch
-    await page.locator('[data-fx-toggle]').click();
-    const off = await page.evaluate(() => ({
-      fxOff: document.documentElement.classList.contains('fx-off'),
-      pressed: document.querySelector('[data-fx-toggle]').getAttribute('aria-pressed'),
-      stored: localStorage.getItem('echelon-fx'),
-      triggers: window.ScrollTrigger ? window.ScrollTrigger.getAll().length : 0,
-      pinned: document.querySelector('#how').classList.contains('is-pinned'),
-      cursor: !!document.querySelector('.lens'),
-    }));
-    check('Effects switch turns everything off', off.fxOff && off.pressed === 'false' && off.triggers === 0 && !off.pinned && !off.cursor, JSON.stringify(off));
-    check('the choice is remembered', off.stored === 'off');
-    await page.locator('[data-fx-toggle]').click();
-    await page.waitForTimeout(400);
-    const on = await page.evaluate(() => ({ fxOff: document.documentElement.classList.contains('fx-off'), triggers: window.ScrollTrigger.getAll().length, pinned: document.querySelector('#how').classList.contains('is-pinned') }));
-    check('…and back on again', !on.fxOff && on.triggers > 0 && on.pinned, JSON.stringify(on));
+    // there's no Effects switch: motion follows the device's "reduce motion" setting only
+    const fx = await page.evaluate(() => ({ button: !!document.querySelector('[data-fx-toggle]'), fxOff: document.documentElement.classList.contains('fx-off') }));
+    check('no Effects switch, and effects are on', !fx.button && !fx.fxOff, JSON.stringify(fx));
 
     const weight = await bytesLoaded(page);
     check('desktop page weight at load under 3 MB', weight.total < 3 * 1024 * 1024, `${(weight.total / 1024).toFixed(0)} KB in ${weight.files} files`);
@@ -472,9 +457,21 @@ try {
     check('"intro": false → no intro on a first visit', !(await page.evaluate(() => document.documentElement.classList.contains('intro-on'))) && !(await page.locator('#intro').count()));
   });
   await withSetting('fx', async (page) => {
-    const s = await page.evaluate(() => ({ off: document.documentElement.classList.contains('fx-off'), gsap: typeof window.gsap !== 'undefined', cursor: !!document.querySelector('.lens'), toggle: !document.querySelector('[data-fx-toggle]').hidden }));
-    check('"effects": false → everything off, no Effects switch shown', s.off && !s.gsap && !s.cursor && !s.toggle, JSON.stringify(s));
+    const s = await page.evaluate(() => ({ off: document.documentElement.classList.contains('fx-off'), gsap: typeof window.gsap !== 'undefined', cursor: !!document.querySelector('.lens') }));
+    check('"effects": false → everything off', s.off && !s.gsap && !s.cursor, JSON.stringify(s));
   });
+  {
+    // A visitor who turned effects off with the old Effects switch gets them back: the
+    // saved choice is ignored and cleared, since there's no switch left to undo it.
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const page = await ctx.newPage();
+    watchErrors(page, 'old-fx-choice');
+    await page.addInitScript(() => { try { localStorage.setItem('echelon-fx', 'off'); } catch (e) {} });
+    await page.goto(BASE, { waitUntil: 'load' });
+    const s = await page.evaluate(() => ({ off: document.documentElement.classList.contains('fx-off'), stored: localStorage.getItem('echelon-fx') }));
+    check('an old saved "effects off" choice is ignored and cleared', !s.off && s.stored === null, JSON.stringify(s));
+    await ctx.close();
+  }
   await withSetting('scroll', async (page) => {
     const s = await page.evaluate(() => ({ gsap: typeof window.gsap !== 'undefined', pinned: document.querySelector('#how').classList.contains('is-pinned'), cursor: !!document.querySelector('.lens') }));
     check('"scrollAnimations": false → no scroll moments, other effects stay', !s.gsap && !s.pinned && s.cursor, JSON.stringify(s));

@@ -28,7 +28,7 @@ initHeader();
 initDialog();
 initCountdown();
 initOdometer();
-initEffectsToggle();
+initMotionPreference();
 initLens();
 
 pageLoaded.then(() => {

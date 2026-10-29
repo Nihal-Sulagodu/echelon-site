@@ -6,7 +6,7 @@ A one-page website for **Echelon**, the interschool tech fest run by Bangalore I
 
 - The look is black and minimal, with a glowing particle orb, glass panels and a liquid-glass cursor.
 - The intro falls from space to the school through real satellite images (Sentinel-2), then the particles form the word "Echelon".
-- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Still placeholders: team sizes, teams per school and the contact email.
+- The date is **Saturday, 21 November 2026**, from the BIS 2026–27 school calendar ("ECHELON 4.0"), and the hero counts down to it. The eight events, their times and rooms, and the day's programme come from the Echelon 4.0 programme document. Teams are three students, with up to two teams per school in every event, and registration uses the ECHELON 4.0 Google Form. Still a placeholder: the contact email.
 - Mobile Lighthouse (28 October 2026, in a container with no GPU, which is harsher than a normal machine): 93 performance, 100 accessibility, 96 best practices, 100 SEO, median of 3 runs. Desktop scores 100 for performance. The 96 in best practices only happened because the fonts couldn't be downloaded in that container.
 - Browser tests: 78 of 79 checks pass. The one failure is the same two missing font files.
 - Details are in [`reports/`](reports/README.md).
@@ -50,9 +50,6 @@ Anything written as `[PLACEHOLDER: something]` shows up on the page as an amber 
 
 | Where in `content.json` | What it needs |
 |---|---|
-| `events.items[n].teamSize` | Each event's team size (all eight events) |
-| `events.items[n].teamsPerSchool` | How many teams each school can send to each event (all eight) |
-| `faq.items[2].a` | The answer to "How big is a team, and how many can a school send?" |
 | `contact.email` | The email address for questions |
 | `faq.items[7].a` | The answer to "Who do we contact with questions?", which needs the same email |
 
@@ -117,7 +114,7 @@ For **everyone**, set any of these to `false` in `content.json`, then run `node 
 | Setting | When `false` |
 |---|---|
 | `intro` | No loading intro |
-| `effects` | Everything still: no intro, the orb, the gravity well and the dot field become still pictures, no glass cursor, no scroll animations, and the strip of event tiles stops moving. The Effects button disappears too. |
+| `effects` | Everything still: no intro, the orb, the gravity well and the dot field become still pictures, no glass cursor, no scroll animations, and the strip of event tiles stops moving. |
 | `customCursor` | Normal mouse pointer |
 | `scrollAnimations` | No scroll-linked animation; the scroll library isn't even downloaded |
 
@@ -217,12 +214,23 @@ The Fontshare licence lets the site use and self-host the fonts. It doesn't allo
 
 ## Regenerating the artwork
 
-The link-preview image (`assets/art/og-image.jpg`) and the icons are drawn by code in `tools/art/art.js`. The orb, the event art, the gravity well and the dot field aren't image files. They're drawn live by the page itself.
+The Echelon logo is drawn in code, in `src/logo.js`: the arched ECHELON around the hero globe, the tree in the header, and every logo and icon file are all made from it. The orb, the event art, the gravity well and the dot field aren't image files either. They're drawn live by the page itself.
 
-1. Edit `tools/art/art.js`.
-2. Run `npm run art`. This starts the local server with saving turned on.
-3. Open http://127.0.0.1:8080/tools/art/ and wait until it says **done**. It writes into `assets/`.
-4. Run `node build.js`.
+After changing `src/logo.js` (or the date in `content.json`, which is on the link preview), run:
+
+```bash
+CHROME_PATH=/path/to/chromium npm run art
+```
+
+It writes the link-preview image (`assets/art/og-image.jpg`), the icons (`assets/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`) and the standalone logo files in `assets/logos/`, then rebuilds the page. It needs Chromium and the Inter font installed.
+
+The standalone logo files, for posters, certificates and slides:
+
+| File | Use it on |
+|---|---|
+| `assets/logos/echelon-logo.svg` | dark backgrounds |
+| `assets/logos/echelon-logo-light.svg` | white or light backgrounds |
+| `assets/logos/echelon-emblem.svg` | anywhere the word is already written nearby |
 
 ---
 
@@ -256,7 +264,7 @@ js/main.js          made by build.js from src/js/ (don't edit by hand)
 js/vendor/          GSAP 3.15.0 + ScrollTrigger (self-hosted)
 assets/fonts/       Fontshare fonts (downloaded, not committed) and DSEG7
 assets/photos/      the circuit-board photo in About
-assets/logos/       BIS emblem, Vidyashilp University logo
+assets/logos/       Echelon logo files, BIS emblem, Vidyashilp University logo
 assets/art/         the generated link-preview image
 assets/intro/       the satellite images for the intro zoom (made by tools/intro-imagery/make.py)
 assets/CREDITS.md   where every asset came from and its licence
@@ -290,8 +298,8 @@ To change something on the live site:
 
 ### Before telling people about it
 
-1. Fill in the team sizes, teams per school and contact email. `node build.js` should print "No placeholders left."
-2. Swap in this year's registration form.
+1. Fill in the contact email. `node build.js` should print "No placeholders left."
+2. Check the registration form still opens: `event.registrationUrl` in `content.json`.
 
 ### Moving to bisechelon.in later
 

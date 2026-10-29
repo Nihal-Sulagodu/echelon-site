@@ -1,10 +1,10 @@
 {
-  "total": 1963264,
-  "files": 18,
+  "total": 1950632,
+  "files": 17,
   "list": [
     {
-      "name": "js/main.js?v=b04b3449cc",
-      "bytes": 26538
+      "name": "js/main.js?v=ec7a9f8bbb",
+      "bytes": 28861
     },
     {
       "name": "assets/intro/earth-0-1920.avif",
@@ -31,16 +31,12 @@
       "bytes": 5432
     },
     {
-      "name": "assets/photos/board-960.webp",
-      "bytes": 17304
-    },
-    {
       "name": "js/vendor/gsap.min.js?v=3.15.0",
       "bytes": 28720
     },
     {
       "name": "assets/favicon.svg",
-      "bytes": 594
+      "bytes": 889
     },
     {
       "name": "js/vendor/ScrollTrigger.min.js?v=3.15.0",
